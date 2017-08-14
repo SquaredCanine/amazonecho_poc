@@ -35,3 +35,14 @@ public final class chooseCitySpeechletRequestStreamHandler extends SpeechletRequ
     }
 }
 ```
+
+You also have to create a few environment variables like or replace the following:
+```java
+System.getenv("username_DB"); //Username for the database
+System.getenv("password_DB"); //Password for the database
+System.getenv("location_DB"); //Location on the web for the database
+System.getenv("password_email); //Password for the email used to send the booking
+System.getenv("username_email); //Username(or email address) used to send the booking
+```
+
+

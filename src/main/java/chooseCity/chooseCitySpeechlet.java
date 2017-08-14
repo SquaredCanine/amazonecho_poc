@@ -558,16 +558,16 @@ public class chooseCitySpeechlet implements Speechlet {
                 image.setLargeImageUrl("https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Flag_of_Amsterdam.svg/1200px-Flag_of_Amsterdam.svg.png");
                 break;
             case "Berlin":
-                image.setSmallImageUrl("https://cdn.flixbus.de/d7files/hi_res_images/places_of_interest/88_Berlin.jpg");
-                image.setLargeImageUrl("https://cdn.flixbus.de/d7files/hi_res_images/places_of_interest/88_Berlin.jpg");
+                image.setSmallImageUrl("https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Brandenburger_Tor_nachts.jpg/1920px-Brandenburger_Tor_nachts.jpg");
+                image.setLargeImageUrl("https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Brandenburger_Tor_nachts.jpg/1920px-Brandenburger_Tor_nachts.jpg");
                 break;
             case "Paris":
-                image.setSmallImageUrl("https://journalistsresource.org/wp-content/uploads/2015/11/Sunset-view-of-Paris-and-Eiffel-tower-720x480.jpg");
-                image.setLargeImageUrl("https://journalistsresource.org/wp-content/uploads/2015/11/Sunset-view-of-Paris-and-Eiffel-tower-720x480.jpg");
+                image.setSmallImageUrl("https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Paris_-_Eiffelturm_und_Marsfeld2.jpg/800px-Paris_-_Eiffelturm_und_Marsfeld2.jpg");
+                image.setLargeImageUrl("https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Paris_-_Eiffelturm_und_Marsfeld2.jpg/800px-Paris_-_Eiffelturm_und_Marsfeld2.jpg");
                 break;
             case "London":
-                image.setSmallImageUrl("https://timedotcom.files.wordpress.com/2015/12/151201_em_britairwayshotel.jpg?w=720&quality=85");
-                image.setLargeImageUrl("https://timedotcom.files.wordpress.com/2015/12/151201_em_britairwayshotel.jpg?w=720&quality=85");
+                image.setSmallImageUrl("https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Londencityhallentheshard.JPG/800px-Londencityhallentheshard.JPG");
+                image.setLargeImageUrl("https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Londencityhallentheshard.JPG/800px-Londencityhallentheshard.JPG");
                 break;
             default:
                 image.setSmallImageUrl("https://www.malibuvista.com/wp-content/uploads/2015/04/iStock_000001947025_Full.jpg");

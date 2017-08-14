@@ -69,6 +69,7 @@ public class chooseCitySpeechlet implements Speechlet {
     private String[] ORDINAL_NUMBER_LIST = new String[]{"first", "second", "third", "fourth", "fifth"};
     private boolean isNewUser = false;
 
+
     /**
      * Als een reis word opgevraagd worden de eerste 3 opties opgeslagen in een Connections object. Zodat er later door de gebruiker
      * een keuze uit kan worden gemaakt.
@@ -549,7 +550,7 @@ public class chooseCitySpeechlet implements Speechlet {
      * Zoekt een leuk plaatje bij je gekozen reis, super leuk, super tof, super gaaf.
      * @return
      */
-    private Image createDestinationImage(){
+    private Image createDestinationImage()  {
         Image image = new Image();
         switch(destination)
         {
@@ -578,6 +579,11 @@ public class chooseCitySpeechlet implements Speechlet {
         return image;
     }
 
+    /**
+     * Parse the time from HH:mm to HHmm
+     * @param newTime
+     * @return
+     */
     private String parseTime(String newTime){
         if(newTime.equals("EV") || newTime.equals("MO") || newTime.equals("NI") || newTime.equals("AF")){
             switch(newTime){
@@ -596,6 +602,15 @@ public class chooseCitySpeechlet implements Speechlet {
             newTime = newTime.replace(":", "");
         }
         return newTime;
+    }
+
+    /**
+     * Parses the data from YYYY-MM-DD to YYYYMMDD
+     * @param newDate
+     * @return
+     */
+    private String parseDate(String newDate){
+        return newDate.replace("-","");
     }
 
     private void addUser(String accestoken){

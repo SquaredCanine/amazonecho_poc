@@ -27,7 +27,7 @@ public class ProvisionalBookingRequest implements requestInterface {
 
     private void setPassengers(){
         CompositionModel model = chooseCitySpeechlet.DB.getComposition(chooseCitySpeechlet.UNIQUE_USER_ID);
-        passengers = "passengers=";
+        passengers = "";
         if(model == null || model.getUID() == null || model.getUID().equals("") || model.getNumberOfPassengers() == 0){
             passengers += "A,";
         }else {

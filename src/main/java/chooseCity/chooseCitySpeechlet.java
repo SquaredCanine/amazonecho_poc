@@ -9,6 +9,7 @@ import com.amazonapi.models.AmazonUser;
 import com.amazonapi.requests.GetUserRequest;
 import com.nsiapi.models.booking.Dnr;
 import com.nsiapi.models.calendardates.Dates;
+import com.nsiapi.models.calendarprices.Period_;
 import com.nsiapi.models.calendarprices.Price;
 import com.nsiapi.models.calendarprices.Prices;
 import com.nsiapi.models.connections.Connection;
@@ -68,7 +69,7 @@ public class chooseCitySpeechlet implements Speechlet {
     public static final NSIApi API = new NSIApi();
     private String[] ORDINAL_NUMBER_LIST = new String[]{"first", "second", "third", "fourth", "fifth"};
     private boolean isNewUser = false;
-
+    private PriceAndTimeRequest cheapestRequest;
 
     /**
      * Als een reis word opgevraagd worden de eerste 3 opties opgeslagen in een Connections object. Zodat er later door de gebruiker
@@ -458,56 +459,11 @@ public class chooseCitySpeechlet implements Speechlet {
      * @return
      */
     private SpeechletResponse getCheapestOption(Intent intent) {
-        Slot cityDestination = intent.getSlot(CITY_DESTINATION);
-        Slot cityOrigin = intent.getSlot(CITY_ORIGIN);
-        String speechText = "";
-        String cheapOriginCode = "";
-        String cheapDestinationCode = "";
-
-        if (cityOrigin != null && cityOrigin.getValue() != null) {
-            cheapOriginCode = API.getResponse(new StationNameRequest(cityOrigin.getValue())).getStation();
+        if(cheapestRequest == null){
+            return getCheapestOptionFromServer(intent);
+        }else{
+            return bookCheapestOption();
         }
-        if (cityDestination != null && cityDestination.getValue() != null) {
-            cheapDestinationCode = API.getResponse(new StationNameRequest(cityDestination.getValue())).getStation();
-        }
-        String cheapestDate = "";
-        Double cheapestPrice = 2000.00;
-        if (!cheapOriginCode.equals("") && !cheapDestinationCode.equals("")) {
-            CalendarDateRequest request = new CalendarDateRequest(cheapDestinationCode, cheapOriginCode);
-            Dates data = API.getResponse(request);
-            if (data.getData().getPricesAvailable()) {
-                CalendarPriceRequest request1 = new CalendarPriceRequest(cheapDestinationCode, cheapOriginCode);
-                Prices prices = API.getResponse(request1);
-                for (Price element : prices.getData().getPrices()) {
-                    if (cheapestPrice > Double.parseDouble(element.getAmount())) {
-                        cheapestPrice = Double.parseDouble(element.getAmount());
-                        cheapestDate = element.getDate();
-                    }
-                }
-                speechText = "The cheapest date for your journey is " + cheapestDate + ". For a price of " + cheapestPrice + ". ";
-            }else{
-                speechText = "There are no prices available for this journey, i am sorry";
-            }
-        } else {
-            CalendarDateRequest request = new CalendarDateRequest(cheapDestinationCode, "NLASC");
-            Dates data = API.getResponse(request);
-            if (data.getData().getPricesAvailable()) {
-                CalendarPriceRequest request1 = new CalendarPriceRequest(cheapDestinationCode, "NLASC");
-                Prices prices = API.getResponse(request1);
-                for (Price element : prices.getData().getPrices()) {
-                    if (cheapestPrice > Double.parseDouble(element.getAmount())) {
-                        cheapestPrice = Double.parseDouble(element.getAmount());
-                        cheapestDate = element.getDate();
-                    }
-                }
-                speechText = "The cheapest date for your journey is " + cheapestDate + ". For a price of " + cheapestPrice + ". ";
-            }else{
-                speechText = "There are no prices available for this journey, i am sorry";
-            }
-        }
-        PlainTextOutputSpeech outputSpeech = new PlainTextOutputSpeech();
-        outputSpeech.setText(speechText);
-        return SpeechletResponse.newTellResponse(outputSpeech);
     }
 
     /**
@@ -654,5 +610,78 @@ public class chooseCitySpeechlet implements Speechlet {
         speechletResp.setDirectives(directiveList);
         speechletResp.setNullableShouldEndSession(false);
         return speechletResp;
+    }
+
+    private SpeechletResponse getCheapestOptionFromServer(Intent intent){
+        Slot cityDestination = intent.getSlot(CITY_DESTINATION);
+        Slot cityOrigin = intent.getSlot(CITY_ORIGIN);
+        String speechText = "";
+        String cheapOriginCode = "";
+        String cheapDestinationCode = "";
+        String cheapestTime = "";
+
+        if (cityOrigin != null && cityOrigin.getValue() != null) {
+            cheapOriginCode = API.getResponse(new StationNameRequest(cityOrigin.getValue())).getStation();
+        }else{
+            cheapOriginCode = "NLASC";
+        }
+        if (cityDestination != null && cityDestination.getValue() != null) {
+            cheapDestinationCode = API.getResponse(new StationNameRequest(cityDestination.getValue())).getStation();
+        }
+        String cheapestDate = "";
+        Double cheapestPrice = 2000.00;
+        if (!cheapOriginCode.equals("") && !cheapDestinationCode.equals("")) {
+            CalendarDateRequest request = new CalendarDateRequest(cheapDestinationCode, cheapOriginCode);
+            Dates data = API.getResponse(request);
+            if (data.getData().getPricesAvailable()) {
+                CalendarPriceRequest request1 = new CalendarPriceRequest(cheapDestinationCode, cheapOriginCode);
+                Prices prices = API.getResponse(request1);
+                for (Price element : prices.getData().getPrices()) {
+                        if (cheapestPrice > Double.parseDouble(element.getAmount())) {
+                            cheapestPrice = Double.parseDouble(element.getAmount());
+                            cheapestDate = element.getDate();
+                            for(Period_ period:element.getDeparture().getPeriods()){
+                                if(element.getAmount().equals(period.getAmount()))
+                                cheapestTime = period.getTime();
+                            }
+                        }
+
+                }
+                speechText = "The cheapest date for your journey is " + cheapestDate + ". For a price of " + cheapestPrice + ". ";
+                cheapestRequest = new PriceAndTimeRequest(cheapOriginCode,cheapDestinationCode,parseDate(cheapestDate),parseTime(cheapestTime));
+            }else{
+                speechText = "There are no prices available for this journey, i am sorry";
+            }
+        }
+        PlainTextOutputSpeech outputSpeech = new PlainTextOutputSpeech();
+        outputSpeech.setText(speechText);
+        Reprompt reprompt = new Reprompt();
+        reprompt.setOutputSpeech(outputSpeech);
+        return SpeechletResponse.newAskResponse(outputSpeech,reprompt);
+    }
+
+    private SpeechletResponse bookCheapestOption(){
+
+        Connections data = API.getResponse(cheapestRequest);
+        UNIQUE_NS_ID = data.getData().getUid();
+        Connection selectedJourney = data.getData().getConnections().get(0);
+        ProvisionalBookingRequest request = new ProvisionalBookingRequest(chooseCitySpeechlet.UNIQUE_NS_ID,
+                selectedJourney.getId(),
+                selectedJourney.getOffers().get(1).getId(),
+                "true",
+                selectedJourney.getOrigin().getCode(),
+                selectedJourney.getDestination().getCode());
+        Dnr model = chooseCitySpeechlet.API.getResponse(request);
+
+
+        String gotoUrl = ("https://www.nsinternational.nl/en/traintickets#/passengers/" + model.getData().getDnrId() + "?signature=" + model.getData().getSignature());
+        String email = DB.getUser(UNIQUE_USER_ID).getEmail();
+        new MailClient(gotoUrl,selectedJourney,email).sendMail();
+
+        String speechText = "Please go to your email to finish the booking";
+        PlainTextOutputSpeech outputSpeech = new PlainTextOutputSpeech();
+        outputSpeech.setText(speechText);
+        cheapestRequest = null;
+        return SpeechletResponse.newTellResponse(outputSpeech);
     }
 }

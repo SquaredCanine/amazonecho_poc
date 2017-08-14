@@ -6,7 +6,7 @@ target/
 
 *.class
 Main.java
-src\main\java\chooseCity\chooseCitySpeechletRequestStreamHandler.java
+src/main/java/chooseCity/chooseCitySpeechletRequestStreamHandler.java
 
 # Package Files #
 *.jar

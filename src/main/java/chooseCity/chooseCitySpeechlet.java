@@ -287,12 +287,12 @@ public class chooseCitySpeechlet implements Speechlet {
             }
             if(arrival){
                 for(Connection element : connectionOptions){
-                    speechText += "The " + ORDINAL_NUMBER_LIST[i] +" option is arrival at " + element.getArrivalTime() + " .";
+                    speechText += "The " + ORDINAL_NUMBER_LIST[i] +" option is arrival at " + element.getArrivalTime() + ". ";
                     i++;
                 }
             }else{
                 for(Connection element : connectionOptions){
-                    speechText += "The " + ORDINAL_NUMBER_LIST[i] +" option is departure at " + element.getDepartureTime() + " .";
+                    speechText += "The " + ORDINAL_NUMBER_LIST[i] +" option is departure at " + element.getDepartureTime() + ". ";
                     i++;
                 }
             }

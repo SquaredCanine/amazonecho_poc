@@ -1,0 +1,21 @@
+build/
+.gradle/
+target/
+.idea/
+*.iml
+
+*.class
+Main.java
+
+# Package Files #
+*.jar
+*.war
+*.ear
+/target
+
+#IntelliJ
+.idea/
+*.iml
+
+#Pom backups
+pom.xml.versionsBackup

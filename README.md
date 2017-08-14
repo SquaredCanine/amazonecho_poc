@@ -45,4 +45,5 @@ System.getenv("password_email); //Password for the email used to send the bookin
 System.getenv("username_email); //Username(or email address) used to send the booking
 ```
 
+And account linking must be setup, you can use <a href="https://developer.amazon.com/blogs/post/Tx3CX1ETRZZ2NPC/Alexa-Account-Linking-5-Steps-to-Seamlessly-Link-Your-Alexa-Skill-with-Login-wit">this</a> tutorial.
 

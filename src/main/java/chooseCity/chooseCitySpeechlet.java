@@ -52,57 +52,103 @@ public class chooseCitySpeechlet implements Speechlet {
 
   /**
    * DB gets used for every database modification.
-   * API gets used for every NS international request
-   * log gets used for logging
    */
   public static final Database DB = new Database();
+  /**
+   * API gets used for every NS international request
+   */
   private static final NSIApi API = new NSIApi();
+  /**
+   * log is the selected logger
+   */
   private static final Logger log = LoggerFactory.getLogger(chooseCitySpeechlet.class);
   /**
-   * Deze Strings zijn de namen van de slots die in de intents zitten.
+   * DATE_SLOT points to date slot
    */
   private static final String DATE_SLOT = "date";
+  /**
+   * CITY_ORIGIN points to fromCity slot
+   */
   private static final String CITY_ORIGIN = "fromCity";
+  /**
+   * CITY_DESTINATION points to toCity slot
+   */
   private static final String CITY_DESTINATION = "toCity";
+  /**
+   * OPTION points to option slot
+   */
   private static final String OPTION = "option";
+  /**
+   * LOCATION points to locationidentifier slot
+   */
   private static final String LOCATION = "locationidentifier";
+  /**
+   * CITY points to cityname slot
+   */
   private static final String CITY = "cityname";
+  /**
+   * COMPOSITION points to numberOfPassengers slot
+   */
   private static final String COMPOSITION = "numberOfPassengers";
+  /**
+   * JUNCTURE points to juncture slot
+   */
   private static final String JUNCTURE = "juncture";
+  /**
+   * TIME points to time slot
+   */
   private static final String TIME = "time";
 
 
-  public static String UNIQUE_USER_ID = "";
+  /**
+   * UNIQUE_NS_ID contains the user ID from the NS International API
+   */
   @SuppressWarnings("WeakerAccess")
   public static String UNIQUE_NS_ID = "";
-  private final String[] ORDINAL_NUMBER_LIST = new String[]{"first", "second", "third", "fourth",
-      "fifth"};
+  /**
+   * UNIQUE_USER_ID contains the User ID from the echo
+   */
+  public static String UNIQUE_USER_ID = "";
+  /**
+   * ORDINAL_NUMBER_LIST Contains a list of ordinal numbers used for presenting the journey options to the user
+   */
+  private final String[] ORDINAL_NUMBER_LIST = new String[]{"first", "second", "third", "fourth", "fifth"};
+  /**
+   * isNewUser indicates if the user is new, default is false
+   */
   private boolean isNewUser = false;
+  /**
+   * cheapestRequest Request containing the cheapest journey
+   */
   private PriceAndTimeRequest cheapestRequest;
 
   /**
-   * Als een reis word opgevraagd worden de eerste 3 opties opgeslagen in een Connections object.
-   * Zodat er later door de gebruiker een keuze uit kan worden gemaakt.
+   * After a traveler intent has been called, 3 journeys will be stored in this list (if there are 3 options
+   * available).
    */
   private ArrayList<Connection> connectionOptions;
 
   /**
-   * Op het moment dat de gebruiker 3 ritjes aan hem gepresenteerd krijgt word deze boolean true,
-   * zodat de chooseintent kan worden aangeroepen.
+   * After the traveler intent has been called and executed, this boolean will be set to true. This means
+   * the choose intent can be handled.
    */
   private boolean journeyHasBeenSelected = false;
 
   /**
-   * Deze Strings bevatten
-   *
-   * date De datum die gebruikt word voor de requests in het formaat: YYYYMMDD
-   * origin De vertreklocatie (naam) zoals: Amsterdam,Paris,Berlin of Londen.
-   * destination De aankomstlocatie (naam) zoals: Amsterdam,Paris,Berlin of Londen.
-   * time De tijd die gebruikt word voor de requests in het formaat: HHmm
+   * date The date used for requests in the format: YYYYMMDD
    */
   private String date = "";
+  /**
+   * origin The place of departure (name) like: Amsterdam,Paris,Berlin or London.
+   */
   private String origin = "";
+  /**
+   * destination The arrival location (name) like: Amsterdam,Paris,Berlin or London.
+   */
   private String destination = "";
+  /**
+   * time The time used for the requests in the format: HHmm
+   */
   private String time = "";
 
   /**

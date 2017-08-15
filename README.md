@@ -1,5 +1,5 @@
 # amazonecho_poc
-<a href="https://squaredcanine.github.io/amazonecho_poc">Java Docs</a>
+<a href="https://squaredcanine.github.io/amazonecho_poc">Java Docs</a><br>
 For NS International I made an application for the Amazon Echo, which allows you to order tickets to popular destinations in Europe.
 
 To make it work for you you need to add a java file in src/main/java/chooseCity. containing the following:

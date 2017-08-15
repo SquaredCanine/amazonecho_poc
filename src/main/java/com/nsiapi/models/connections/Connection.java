@@ -1,15 +1,14 @@
-
 package com.nsiapi.models.connections;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -26,172 +25,179 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 })
 public class Connection {
 
-    @JsonProperty("id")
-    private String id;
-    @JsonProperty("status")
-    private String status;
-    @JsonProperty("origin")
-    private Origin origin;
-    @JsonProperty("destination")
-    private Destination destination;
-    @JsonProperty("duration")
-    private Duration duration;
-    @JsonProperty("transfers")
-    private Integer transfers;
-    @JsonProperty("modalities")
-    private List<Modality> modalities = null;
-    @JsonProperty("messages")
-    private List<Object> messages = null;
-    @JsonProperty("bndsCode")
-    private String bndsCode;
-    @JsonProperty("offers")
-    private List<Offer> offers = null;
-    @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+  @JsonProperty("id")
+  private String id;
+  @JsonProperty("status")
+  private String status;
+  @JsonProperty("origin")
+  private Origin origin;
+  @JsonProperty("destination")
+  private Destination destination;
+  @JsonProperty("duration")
+  private Duration duration;
+  @JsonProperty("transfers")
+  private Integer transfers;
+  @JsonProperty("modalities")
+  private List<Modality> modalities = null;
+  @JsonProperty("messages")
+  private List<Object> messages = null;
+  @JsonProperty("bndsCode")
+  private String bndsCode;
+  @JsonProperty("offers")
+  private List<Offer> offers = null;
+  @JsonIgnore
+  private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
 
-    public String getArrivalTime(){
-        return getDestination().getArrival().getPlanned().split(" ")[1];
-    }
-    public String getDepartureTime(){
-        return getOrigin().getDeparture().getPlanned().split(" ")[1];
-    }
-    public String getArrivalDate(){
-        return getDestination().getArrival().getPlanned().split(" ")[0];
-    }
-    public String getDepartureDate(){
-        return getOrigin().getDeparture().getPlanned().split(" ")[0];
-    }
+  public String getArrivalTime() {
+    return getDestination().getArrival().getPlanned().split(" ")[1];
+  }
 
-    public String getDBArrivalTime(){
-        return getDestination().getArrival().getPlanned().split(" ")[1].replace(":","");
-    }
-    public String getDBDepartureTime(){
-        return getOrigin().getDeparture().getPlanned().split(" ")[1].replace(":","");
-    }
-    public String getDBArrivalDate(){
-        return getDestination().getArrival().getPlanned().split(" ")[0].replace("-","");
-    }
-    public String getDBDepartureDate(){
-        return getOrigin().getDeparture().getPlanned().split(" ")[0].replace("-","");
-    }
+  public String getDepartureTime() {
+    return getOrigin().getDeparture().getPlanned().split(" ")[1];
+  }
 
-    public String getJourneySummary(){
-        return "You will depart at " + getOrigin().getDeparture().getPlanned().split(" ")[1] +
-                " , from " + getOrigin().getName() +
-                ". Your journey will be " + getDuration().getHours() + " hours and " + getDuration().getMinutes() + " minutes long. " +
-                " And you will arrive on " + getDestination().getArrival().getPlanned().split(" ")[1] +
-                " at " + getDestination().getName() + ". ";
-    }
+  public String getArrivalDate() {
+    return getDestination().getArrival().getPlanned().split(" ")[0];
+  }
 
-    @JsonProperty("id")
-    public String getId() {
-        return id;
-    }
+  public String getDepartureDate() {
+    return getOrigin().getDeparture().getPlanned().split(" ")[0];
+  }
 
-    @JsonProperty("id")
-    public void setId(String id) {
-        this.id = id;
-    }
+  public String getDBArrivalTime() {
+    return getDestination().getArrival().getPlanned().split(" ")[1].replace(":", "");
+  }
 
-    @JsonProperty("status")
-    public String getStatus() {
-        return status;
-    }
+  public String getDBDepartureTime() {
+    return getOrigin().getDeparture().getPlanned().split(" ")[1].replace(":", "");
+  }
 
-    @JsonProperty("status")
-    public void setStatus(String status) {
-        this.status = status;
-    }
+  public String getDBArrivalDate() {
+    return getDestination().getArrival().getPlanned().split(" ")[0].replace("-", "");
+  }
 
-    @JsonProperty("origin")
-    public Origin getOrigin() {
-        return origin;
-    }
+  public String getDBDepartureDate() {
+    return getOrigin().getDeparture().getPlanned().split(" ")[0].replace("-", "");
+  }
 
-    @JsonProperty("origin")
-    public void setOrigin(Origin origin) {
-        this.origin = origin;
-    }
+  public String getJourneySummary() {
+    return "You will depart at " + getOrigin().getDeparture().getPlanned().split(" ")[1] +
+        " , from " + getOrigin().getName() +
+        ". Your journey will be " + getDuration().getHours() + " hours and " + getDuration()
+        .getMinutes() + " minutes long. " +
+        " And you will arrive on " + getDestination().getArrival().getPlanned().split(" ")[1] +
+        " at " + getDestination().getName() + ". ";
+  }
 
-    @JsonProperty("destination")
-    public Destination getDestination() {
-        return destination;
-    }
+  @JsonProperty("id")
+  public String getId() {
+    return id;
+  }
 
-    @JsonProperty("destination")
-    public void setDestination(Destination destination) {
-        this.destination = destination;
-    }
+  @JsonProperty("id")
+  public void setId(String id) {
+    this.id = id;
+  }
 
-    @JsonProperty("duration")
-    public Duration getDuration() {
-        return duration;
-    }
+  @JsonProperty("status")
+  public String getStatus() {
+    return status;
+  }
 
-    @JsonProperty("duration")
-    public void setDuration(Duration duration) {
-        this.duration = duration;
-    }
+  @JsonProperty("status")
+  public void setStatus(String status) {
+    this.status = status;
+  }
 
-    @JsonProperty("transfers")
-    public Integer getTransfers() {
-        return transfers;
-    }
+  @JsonProperty("origin")
+  public Origin getOrigin() {
+    return origin;
+  }
 
-    @JsonProperty("transfers")
-    public void setTransfers(Integer transfers) {
-        this.transfers = transfers;
-    }
+  @JsonProperty("origin")
+  public void setOrigin(Origin origin) {
+    this.origin = origin;
+  }
 
-    @JsonProperty("modalities")
-    public List<Modality> getModalities() {
-        return modalities;
-    }
+  @JsonProperty("destination")
+  public Destination getDestination() {
+    return destination;
+  }
 
-    @JsonProperty("modalities")
-    public void setModalities(List<Modality> modalities) {
-        this.modalities = modalities;
-    }
+  @JsonProperty("destination")
+  public void setDestination(Destination destination) {
+    this.destination = destination;
+  }
 
-    @JsonProperty("messages")
-    public List<Object> getMessages() {
-        return messages;
-    }
+  @JsonProperty("duration")
+  public Duration getDuration() {
+    return duration;
+  }
 
-    @JsonProperty("messages")
-    public void setMessages(List<Object> messages) {
-        this.messages = messages;
-    }
+  @JsonProperty("duration")
+  public void setDuration(Duration duration) {
+    this.duration = duration;
+  }
 
-    @JsonProperty("bndsCode")
-    public String getBndsCode() {
-        return bndsCode;
-    }
+  @JsonProperty("transfers")
+  public Integer getTransfers() {
+    return transfers;
+  }
 
-    @JsonProperty("bndsCode")
-    public void setBndsCode(String bndsCode) {
-        this.bndsCode = bndsCode;
-    }
+  @JsonProperty("transfers")
+  public void setTransfers(Integer transfers) {
+    this.transfers = transfers;
+  }
 
-    @JsonProperty("offers")
-    public List<Offer> getOffers() {
-        return offers;
-    }
+  @JsonProperty("modalities")
+  public List<Modality> getModalities() {
+    return modalities;
+  }
 
-    @JsonProperty("offers")
-    public void setOffers(List<Offer> offers) {
-        this.offers = offers;
-    }
+  @JsonProperty("modalities")
+  public void setModalities(List<Modality> modalities) {
+    this.modalities = modalities;
+  }
 
-    @JsonAnyGetter
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
+  @JsonProperty("messages")
+  public List<Object> getMessages() {
+    return messages;
+  }
 
-    @JsonAnySetter
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
+  @JsonProperty("messages")
+  public void setMessages(List<Object> messages) {
+    this.messages = messages;
+  }
+
+  @JsonProperty("bndsCode")
+  public String getBndsCode() {
+    return bndsCode;
+  }
+
+  @JsonProperty("bndsCode")
+  public void setBndsCode(String bndsCode) {
+    this.bndsCode = bndsCode;
+  }
+
+  @JsonProperty("offers")
+  public List<Offer> getOffers() {
+    return offers;
+  }
+
+  @JsonProperty("offers")
+  public void setOffers(List<Offer> offers) {
+    this.offers = offers;
+  }
+
+  @JsonAnyGetter
+  public Map<String, Object> getAdditionalProperties() {
+    return this.additionalProperties;
+  }
+
+  @JsonAnySetter
+  public void setAdditionalProperty(String name, Object value) {
+    this.additionalProperties.put(name, value);
+  }
 
 }

@@ -1,127 +1,133 @@
 package com.nsiapi.requests;
 
 import chooseCity.chooseCitySpeechlet;
-import com.database.models.CompositionModel;
 import com.RequestInterface;
+import com.database.models.CompositionModel;
 
 public class ProvisionalBookingRequest implements RequestInterface {
-    private String userID;
-    private String connectionID;
-    private String offerID;
-    private String passengers;
-    private String seatreservation = "true";
-    private String originCode;
-    private String destinationCode;
-    private String gotoUrl = "bookings/provision/";
-    private String alternateGotoUrl = "bookings/alternative/";
 
-    public ProvisionalBookingRequest(String userID, String connectionID, String offerID, String seatreservation, String originCode, String destinationCode) {
-        this.userID = userID;
-        this.connectionID = connectionID;
-        this.offerID = offerID;
-        this.seatreservation = seatreservation;
-        this.originCode = originCode;
-        this.destinationCode = destinationCode;
-        setPassengers();
-    }
+  private String userID;
+  private String connectionID;
+  private String offerID;
+  private String passengers;
+  private String seatreservation = "true";
+  private String originCode;
+  private String destinationCode;
+  private String gotoUrl = "bookings/provision/";
+  private String alternateGotoUrl = "bookings/alternative/";
 
-    private void setPassengers(){
-        CompositionModel model = chooseCitySpeechlet.DB.getComposition(chooseCitySpeechlet.UNIQUE_USER_ID);
-        passengers = "";
-        if(model == null || model.getUID() == null || model.getUID().equals("") || model.getNumberOfPassengers() == 0){
-            passengers += "A,";
-        }else {
-            for (int i = 0; i < model.getNumberOfPassengers(); i++) {
-                passengers += "A,";
-            }
-        }
-    }
+  public ProvisionalBookingRequest(String userID, String connectionID, String offerID,
+      String seatreservation, String originCode, String destinationCode) {
+    this.userID = userID;
+    this.connectionID = connectionID;
+    this.offerID = offerID;
+    this.seatreservation = seatreservation;
+    this.originCode = originCode;
+    this.destinationCode = destinationCode;
+    setPassengers();
+  }
 
-    public String getRequestUrl(){
-        return (gotoUrl + userID + "?origin="
-                + originCode + "&destination="
-                + destinationCode + "&lang=nl");
+  private void setPassengers() {
+    CompositionModel model = chooseCitySpeechlet.DB
+        .getComposition(chooseCitySpeechlet.UNIQUE_USER_ID);
+    passengers = "";
+    if (model == null || model.getUID() == null || model.getUID().equals("")
+        || model.getNumberOfPassengers() == 0) {
+      passengers += "A,";
+    } else {
+      for (int i = 0; i < model.getNumberOfPassengers(); i++) {
+        passengers += "A,";
+      }
     }
+  }
 
-    public String getAlternateRequestUrl(){
-        return (alternateGotoUrl + userID + "?origin="
-                + originCode + "&destination="
-                + destinationCode + "&lang=nl");
-    }
+  public String getRequestUrl() {
+    return (gotoUrl + userID + "?origin="
+        + originCode + "&destination="
+        + destinationCode + "&lang=nl");
+  }
 
-    public String getRequestBody(){
-        return ("{\"outbound\":" +
-                "{\"connectionId\":\"" + connectionID + "\",\"offerId\":\"" + offerID + "\",\"seatReservation\":" + seatreservation + "},\"passengers\":\"" + passengers + "\"}");
-    }
-    public String getConnectionID() {
-        return connectionID;
-    }
+  public String getAlternateRequestUrl() {
+    return (alternateGotoUrl + userID + "?origin="
+        + originCode + "&destination="
+        + destinationCode + "&lang=nl");
+  }
 
-    public void setConnectionID(String connectionID) {
-        this.connectionID = connectionID;
-    }
+  public String getRequestBody() {
+    return ("{\"outbound\":" +
+        "{\"connectionId\":\"" + connectionID + "\",\"offerId\":\"" + offerID
+        + "\",\"seatReservation\":" + seatreservation + "},\"passengers\":\"" + passengers + "\"}");
+  }
 
-    public String getOfferID() {
-        return offerID;
-    }
+  public String getConnectionID() {
+    return connectionID;
+  }
 
-    public void setOfferID(String offerID) {
-        this.offerID = offerID;
-    }
+  public void setConnectionID(String connectionID) {
+    this.connectionID = connectionID;
+  }
 
-    public String getPassengers() {
-        return passengers;
-    }
+  public String getOfferID() {
+    return offerID;
+  }
 
-    public void setPassengers(String passengers) {
-        this.passengers = passengers;
-    }
+  public void setOfferID(String offerID) {
+    this.offerID = offerID;
+  }
 
-    public String getSeatreservation() {
-        return seatreservation;
-    }
+  public String getPassengers() {
+    return passengers;
+  }
 
-    public void setSeatreservation(String seatreservation) {
-        this.seatreservation = seatreservation;
-    }
+  public void setPassengers(String passengers) {
+    this.passengers = passengers;
+  }
 
-    public String getUserID() {
-        return userID;
-    }
+  public String getSeatreservation() {
+    return seatreservation;
+  }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
-    }
+  public void setSeatreservation(String seatreservation) {
+    this.seatreservation = seatreservation;
+  }
 
-    public String getOriginCode() {
-        return originCode;
-    }
+  public String getUserID() {
+    return userID;
+  }
 
-    public void setOriginCode(String originCode) {
-        this.originCode = originCode;
-    }
+  public void setUserID(String userID) {
+    this.userID = userID;
+  }
 
-    public String getDestinationCode() {
-        return destinationCode;
-    }
+  public String getOriginCode() {
+    return originCode;
+  }
 
-    public void setDestinationCode(String destinationCode) {
-        this.destinationCode = destinationCode;
-    }
+  public void setOriginCode(String originCode) {
+    this.originCode = originCode;
+  }
 
-    public String getGotoUrl() {
-        return gotoUrl;
-    }
+  public String getDestinationCode() {
+    return destinationCode;
+  }
 
-    public void setGotoUrl(String gotoUrl) {
-        this.gotoUrl = gotoUrl;
-    }
+  public void setDestinationCode(String destinationCode) {
+    this.destinationCode = destinationCode;
+  }
 
-    public String getAlternateGotoUrl() {
-        return alternateGotoUrl;
-    }
+  public String getGotoUrl() {
+    return gotoUrl;
+  }
 
-    public void setAlternateGotoUrl(String alternateGotoUrl) {
-        this.alternateGotoUrl = alternateGotoUrl;
-    }
+  public void setGotoUrl(String gotoUrl) {
+    this.gotoUrl = gotoUrl;
+  }
+
+  public String getAlternateGotoUrl() {
+    return alternateGotoUrl;
+  }
+
+  public void setAlternateGotoUrl(String alternateGotoUrl) {
+    this.alternateGotoUrl = alternateGotoUrl;
+  }
 }

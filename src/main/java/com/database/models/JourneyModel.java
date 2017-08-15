@@ -1,6 +1,3 @@
-/**
- * Created by doombringer on 7/31/2017.
- */
 package com.database.models;
 
 public class JourneyModel {

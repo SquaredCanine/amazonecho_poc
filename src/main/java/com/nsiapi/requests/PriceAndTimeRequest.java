@@ -9,15 +9,16 @@ import java.util.ArrayList;
 /**
  * Created by doombringer on 7/24/2017.
  */
+@SuppressWarnings({"FieldCanBeLocal", "StringConcatenationInLoop"})
 public class PriceAndTimeRequest implements RequestInterface {
 
-  private String originCode;
-  private String destinationCode;
+  private final String originCode;
+  private final String destinationCode;
   private String date = "20170724";
   private String time = "1600";
   private String passengers;
   private String timetype;
-  private String gotoUrl = "connections/";
+  private final String gotoUrl = "connections/";
   private boolean arrival = false;
 
 

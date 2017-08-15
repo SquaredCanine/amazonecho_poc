@@ -2,11 +2,12 @@ package com.nsiapi.requests;
 
 import com.RequestInterface;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class CalendarPriceRequest implements RequestInterface {
 
-  private String destinationCode;
-  private String originCode;
-  private String goToUrl = "calendarprices/";
+  private final String destinationCode;
+  private final String originCode;
+  private final String goToUrl = "calendarprices/";
 
   public CalendarPriceRequest(String destinationCode, String originCode) {
     this.destinationCode = destinationCode;

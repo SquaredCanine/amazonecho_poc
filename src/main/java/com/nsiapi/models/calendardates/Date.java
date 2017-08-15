@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings({"WeakerAccess", "CanBeFinal"})
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "date",
@@ -21,7 +22,7 @@ public class Date {
   @JsonProperty("status")
   private String status;
   @JsonIgnore
-  private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+  private Map<String, Object> additionalProperties = new HashMap<>();
 
   @JsonProperty("date")
   public String getDate() {

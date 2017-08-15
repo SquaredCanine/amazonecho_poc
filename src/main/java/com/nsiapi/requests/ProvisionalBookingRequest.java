@@ -4,6 +4,7 @@ import chooseCity.chooseCitySpeechlet;
 import com.RequestInterface;
 import com.database.models.CompositionModel;
 
+@SuppressWarnings("StringConcatenationInLoop")
 public class ProvisionalBookingRequest implements RequestInterface {
 
   private String userID;

@@ -16,6 +16,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 
+@SuppressWarnings({"FieldCanBeLocal", "ConstantConditions"})
 public class AmazonApi {
 
   private final String BASE_URL = "https://api.amazon.com/user/profile?access_token=";

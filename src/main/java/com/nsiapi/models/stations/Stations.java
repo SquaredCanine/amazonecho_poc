@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("CanBeFinal")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "status",
@@ -21,7 +22,7 @@ public class Stations {
   @JsonProperty("data")
   private Data data;
   @JsonIgnore
-  private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+  private Map<String, Object> additionalProperties = new HashMap<>();
 
   @JsonProperty("status")
   public String getStatus() {
@@ -33,6 +34,7 @@ public class Stations {
     this.status = status;
   }
 
+  @SuppressWarnings("UnusedAssignment")
   public String getStation() {
     String station = "";
     for (Station element : getData().getStations()) {
@@ -44,6 +46,7 @@ public class Stations {
     return station;
   }
 
+  @SuppressWarnings("WeakerAccess")
   @JsonProperty("data")
   public Data getData() {
     return data;

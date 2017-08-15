@@ -5,10 +5,11 @@ import com.RequestInterface;
 /**
  * Created by doombringer on 7/31/2017.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class StationNameRequest implements RequestInterface {
 
-  private String city;
-  private String gotoUrl = "stations/";
+  private final String city;
+  private final String gotoUrl = "stations/";
 
   public StationNameRequest(String city) {
     this.city = city;

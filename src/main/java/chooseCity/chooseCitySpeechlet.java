@@ -47,6 +47,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+@SuppressWarnings("SameParameterValue")
 public class chooseCitySpeechlet implements Speechlet {
 
   /**
@@ -55,6 +56,7 @@ public class chooseCitySpeechlet implements Speechlet {
    * word gebruikt voor alle api requests aan de NSI Api
    */
   public static final Database DB = new Database();
+  @SuppressWarnings("WeakerAccess")
   public static final NSIApi API = new NSIApi();
   private static final Logger log = LoggerFactory.getLogger(chooseCitySpeechlet.class);
   /**
@@ -72,8 +74,9 @@ public class chooseCitySpeechlet implements Speechlet {
 
 
   public static String UNIQUE_USER_ID = "";
+  @SuppressWarnings("WeakerAccess")
   public static String UNIQUE_NS_ID = "";
-  private String[] ORDINAL_NUMBER_LIST = new String[]{"first", "second", "third", "fourth",
+  private final String[] ORDINAL_NUMBER_LIST = new String[]{"first", "second", "third", "fourth",
       "fifth"};
   private boolean isNewUser = false;
   private PriceAndTimeRequest cheapestRequest;
@@ -93,10 +96,10 @@ public class chooseCitySpeechlet implements Speechlet {
   /**
    * Deze Strings bevatten
    *
-   * @Date De datum die gebruikt word voor de requests in het formaat: YYYYMMDD
-   * @Origin De vertreklocatie (naam) zoals: Amsterdam,Paris,Berlin of Londen.
-   * @Destination De aankomstlocatie (naam) zoals: Amsterdam,Paris,Berlin of Londen.
-   * @Time De tijd die gebruikt word voor de requests in het formaat: HHmm
+   * date De datum die gebruikt word voor de requests in het formaat: YYYYMMDD
+   * origin De vertreklocatie (naam) zoals: Amsterdam,Paris,Berlin of Londen.
+   * destination De aankomstlocatie (naam) zoals: Amsterdam,Paris,Berlin of Londen.
+   * time De tijd die gebruikt word voor de requests in het formaat: HHmm
    */
   private String date = "";
   private String origin = "";
@@ -118,7 +121,7 @@ public class chooseCitySpeechlet implements Speechlet {
     initializeDateandTime();
     UNIQUE_USER_ID = session.getUser().getUserId();
     UsersModel user = DB.getUser(UNIQUE_USER_ID);
-    if (user == null || user.getName().equals(null) || user.getName().equals("")) {
+    if (user == null || user.getName() == null || user.getName().equals("")) {
       isNewUser = true;
     }
   }
@@ -220,7 +223,7 @@ public class chooseCitySpeechlet implements Speechlet {
   private SpeechletResponse getTravelerResponse(Intent intent) {
 
     //Create placeholder speech output
-    String speechText = "";
+    StringBuilder speechText = new StringBuilder();
     Slot cityDestination = intent.getSlot(CITY_DESTINATION);
     Slot cityOrigin = intent.getSlot(CITY_ORIGIN);
     Slot slotDate = intent.getSlot(DATE_SLOT);
@@ -230,16 +233,16 @@ public class chooseCitySpeechlet implements Speechlet {
     boolean arrival = false;
     if (cityOrigin != null && cityOrigin.getValue() != null) {
       origin = cityOrigin.getValue();
-      speechText = "You have chosen " + origin + " as your place of departure. ";
+      speechText = new StringBuilder("You have chosen " + origin + " as your place of departure. ");
     }
     if (cityDestination != null && cityDestination.getValue() != null) {
       destination = cityDestination.getValue();
-      speechText += "and you want to go to " + destination + ". ";
+      speechText.append("and you want to go to ").append(destination).append(". ");
     }
     if (slotDate != null && slotDate.getValue() != null) {
       date = slotDate.getValue();
       date = date.replace("-", "");
-      speechText += "On " + slotDate.getValue() + ". ";
+      speechText.append("On ").append(slotDate.getValue()).append(". ");
     }
     if (juncture != null && juncture.getValue() != null) {
       if (juncture.getValue().equals("arrival")) {
@@ -278,33 +281,35 @@ public class chooseCitySpeechlet implements Speechlet {
         altSpeech.setText("There are no trains available, try a different date");
         return SpeechletResponse.newTellResponse(altSpeech);
       } else {
-        speechText += "There are " + connectionOptions.size() + " options available. ";
+        speechText.append("There are ").append(connectionOptions.size())
+            .append(" options available. ");
       }
       if (arrival) {
         for (Connection element : connectionOptions) {
-          speechText +=
-              "The " + ORDINAL_NUMBER_LIST[i] + " option is arrival at " + element.getArrivalTime()
-                  + ". ";
+          speechText.append("The ").append(ORDINAL_NUMBER_LIST[i]).append(" option is arrival at ")
+              .append(element.getArrivalTime()).append(". ");
           i++;
         }
       } else {
         for (Connection element : connectionOptions) {
-          speechText += "The " + ORDINAL_NUMBER_LIST[i] + " option is departure at " + element
-              .getDepartureTime() + ". ";
+          speechText.append("The ").append(ORDINAL_NUMBER_LIST[i])
+              .append(" option is departure at ").append(element
+              .getDepartureTime()).append(". ");
           i++;
         }
       }
-      speechText += "Which option do you choose?";
+      speechText.append("Which option do you choose?");
     } else {
-      speechText = "Something went wrong with collection data of your journey, please try again later";
+      speechText = new StringBuilder(
+          "Something went wrong with collection data of your journey, please try again later");
     }
     StandardCard card = new StandardCard();
     card.setTitle("chooseCity");
-    card.setText(speechText);
+    card.setText(speechText.toString());
 
     String repromptText = "If you want to cancel the order, just say exit.";
 
-    return newAskResponse(speechText, repromptText, card);
+    return newAskResponse(speechText.toString(), repromptText, card);
   }
 
   /**
@@ -617,6 +622,7 @@ public class chooseCitySpeechlet implements Speechlet {
     return speechletResp;
   }
 
+  @SuppressWarnings("UnusedAssignment")
   private SpeechletResponse getCheapestOptionFromServer(Intent intent) {
     Slot cityDestination = intent.getSlot(CITY_DESTINATION);
     Slot cityOrigin = intent.getSlot(CITY_ORIGIN);

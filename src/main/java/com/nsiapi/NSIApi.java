@@ -27,6 +27,7 @@ import org.apache.http.impl.client.HttpClientBuilder;
 /**
  * Created by doombringer on 7/24/2017.
  */
+@SuppressWarnings("ConstantConditions")
 public class NSIApi {
 
   private final String BASE_URL = "https://www.nsinternational.nl/api/v1.1/";
@@ -52,9 +53,8 @@ public class NSIApi {
       Connections model = gson.fromJson(reader, Connections.class);
       client.close();
       return model;
-    } catch (IOException IoE) {
+    }catch (IOException IoE) {
       System.out.println("IOException " + IoE.getMessage());
-
     }
     throw new ParseException("Het is helemaal kut");
   }

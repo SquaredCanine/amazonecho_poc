@@ -14,9 +14,9 @@ import java.util.ArrayList;
 public class Database {
 
   private Connection con = null;
-  private String host = System.getenv("location_DB");
-  private String uName = System.getenv("username_DB");
-  private String uPass = System.getenv("password_DB");
+  private final String host = System.getenv("location_DB");
+  private final String uName = System.getenv("username_DB");
+  private final String uPass = System.getenv("password_DB");
   private ResultSet rs = null;
   private int ri = 0;
 
@@ -61,7 +61,7 @@ public class Database {
       ps.setString(1, aUID);
 
       rs = ps.executeQuery();
-      ArrayList<LocationsModel> resultList = new ArrayList<LocationsModel>();
+      ArrayList<LocationsModel> resultList = new ArrayList<>();
       while (rs.next()) {
         resultList.add(new LocationsModel(rs.getString(1), rs.getString(2), rs.getString(3)));
       }
@@ -69,7 +69,7 @@ public class Database {
     } catch (SQLException SQLE) {
       System.out.println("There is a problem with SQL: " + SQLE.getMessage());
     }
-    return new ArrayList<LocationsModel>();
+    return new ArrayList<>();
   }
 
   public void updateLocation(String aUID, String identifier, String city, String stationCode) {
@@ -89,6 +89,7 @@ public class Database {
     }
   }
 
+  @SuppressWarnings("WeakerAccess")
   public void removeLocation(String aUID, String identifier) {
     try {
       PreparedStatement ps = con
@@ -195,6 +196,7 @@ public class Database {
     }
   }
 
+  @SuppressWarnings("WeakerAccess")
   public void removeComposition(String aUID) {
     try {
       PreparedStatement ps = con.prepareStatement("DELETE FROM `mydb`.`Composition` WHERE `UID`=?");
@@ -234,7 +236,7 @@ public class Database {
       ps.setString(1, aUID);
 
       rs = ps.executeQuery();
-      ArrayList<JourneyModel> resultList = new ArrayList<JourneyModel>();
+      ArrayList<JourneyModel> resultList = new ArrayList<>();
       while (rs.next()) {
         resultList.add(
             new JourneyModel(rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5),

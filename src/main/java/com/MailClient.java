@@ -8,11 +8,11 @@ import org.apache.commons.mail.SimpleEmail;
 
 public class MailClient {
 
-  private String gotoUrl;
-  private String sender = System.getenv("username_email");
-  private String password = System.getenv("password_email");
-  private Connection journey;
-  private String userEmail;
+  private final String gotoUrl;
+  private final String sender = System.getenv("username_email");
+  private final String password = System.getenv("password_email");
+  private final Connection journey;
+  private final String userEmail;
 
   public MailClient(String gotoUrl, Connection journey, String userEmail) {
     this.gotoUrl = gotoUrl;

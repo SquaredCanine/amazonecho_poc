@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("CanBeFinal")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "planned",
@@ -27,10 +28,10 @@ public class Departure {
   @JsonProperty("updatedPlatform")
   private Object updatedPlatform;
   @JsonIgnore
-  private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+  private Map<String, Object> additionalProperties = new HashMap<>();
 
   @JsonProperty("planned")
-  public String getPlanned() {
+  String getPlanned() {
     return planned;
   }
 

@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("CanBeFinal")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
     "stations"
@@ -19,10 +20,10 @@ public class Data {
   @JsonProperty("stations")
   private List<Station> stations = null;
   @JsonIgnore
-  private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+  private Map<String, Object> additionalProperties = new HashMap<>();
 
   @JsonProperty("stations")
-  public List<Station> getStations() {
+  List<Station> getStations() {
     return stations;
   }
 

@@ -51,13 +51,12 @@ import org.slf4j.LoggerFactory;
 public class chooseCitySpeechlet implements Speechlet {
 
   /**
-   * Database word gebruikt voor alle com.database handelingen, de unique user id is het ID van de
-   * gebruiker van de echo. Deze word ingesteld op het moment dat de skill gestart word. De NSIApi
-   * word gebruikt voor alle api requests aan de NSI Api
+   * DB gets used for every database modification.
+   * API gets used for every NS international request
+   * log gets used for logging
    */
   public static final Database DB = new Database();
-  @SuppressWarnings("WeakerAccess")
-  public static final NSIApi API = new NSIApi();
+  private static final NSIApi API = new NSIApi();
   private static final Logger log = LoggerFactory.getLogger(chooseCitySpeechlet.class);
   /**
    * Deze Strings zijn de namen van de slots die in de intents zitten.

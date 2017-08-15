@@ -1,6 +1,6 @@
 package com;
 
-public interface requestInterface {
+public interface RequestInterface {
 
     public String getRequestUrl();
 }

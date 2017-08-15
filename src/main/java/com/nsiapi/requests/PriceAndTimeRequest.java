@@ -3,14 +3,14 @@ package com.nsiapi.requests;
 import chooseCity.chooseCitySpeechlet;
 import com.database.models.CompositionModel;
 import com.database.models.LocationsModel;
-import com.requestInterface;
+import com.RequestInterface;
 
 import java.util.ArrayList;
 
 /**
  * Created by doombringer on 7/24/2017.
  */
-public class PriceAndTimeRequest implements requestInterface {
+public class PriceAndTimeRequest implements RequestInterface {
     private String originCode;
     private String destinationCode;
     private String date = "20170724";

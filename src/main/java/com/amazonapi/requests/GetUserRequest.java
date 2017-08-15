@@ -1,8 +1,8 @@
 package com.amazonapi.requests;
 
-import com.requestInterface;
+import com.RequestInterface;
 
-public class GetUserRequest implements requestInterface {
+public class GetUserRequest implements RequestInterface {
     private String accesToken;
 
     public GetUserRequest(String accesToken){

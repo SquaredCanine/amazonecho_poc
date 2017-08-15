@@ -2,9 +2,9 @@ package com.nsiapi.requests;
 
 import chooseCity.chooseCitySpeechlet;
 import com.database.models.CompositionModel;
-import com.requestInterface;
+import com.RequestInterface;
 
-public class ProvisionalBookingRequest implements requestInterface {
+public class ProvisionalBookingRequest implements RequestInterface {
     private String userID;
     private String connectionID;
     private String offerID;

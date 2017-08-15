@@ -1,0 +1,439 @@
+{
+  "intents": [
+    {
+      "name": "AMAZON.CancelIntent",
+      "samples": [
+        "Cancel the order",
+        "cancel "
+      ]
+    },
+    {
+      "name": "AMAZON.HelpIntent",
+      "samples": [
+        "help",
+        "Help me",
+        "What do I say"
+      ]
+    },
+    {
+      "name": "AMAZON.StopIntent",
+      "samples": [
+        "Shut up",
+        "Stop",
+        "Stop talking",
+        "Fuck you",
+        "Stop it"
+      ]
+    },
+    {
+      "name": "Cheapest",
+      "samples": [
+        "the cheapest option to {toCity}",
+        "the cheapest option from {fromCity} to {toCity}",
+        "book the cheapest option"
+      ],
+      "slots": [
+        {
+          "name": "toCity",
+          "type": "AMAZON.EUROPE_CITY",
+          "samples": []
+        },
+        {
+          "name": "fromCity",
+          "type": "AMAZON.EUROPE_CITY",
+          "samples": []
+        }
+      ]
+    },
+    {
+      "name": "ChooseIntent",
+      "samples": [
+        "I choose {option}",
+        "I choose option {option}",
+        "I want option {option}",
+        "option {option}"
+      ],
+      "slots": [
+        {
+          "name": "option",
+          "type": "AMAZON.NUMBER",
+          "samples": [
+            "option {option}",
+            "{option}"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "CompositionIntent",
+      "samples": [
+        "I want to travel with {numberOfPassengers} people",
+        "i always travel with {numberOfPassengers} people",
+        "i always travel {numberOfPassengers}",
+        "i travel with {numberOfPassengers} people",
+        "i want to change my composition"
+      ],
+      "slots": [
+        {
+          "name": "numberOfPassengers",
+          "type": "AMAZON.NUMBER",
+          "samples": [
+            "with {numberOfPassengers}",
+            "for {numberOfPassengers} people",
+            "with {numberOfPassengers} people"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "LocationIntent",
+      "samples": [
+        "I want to change a location",
+        "I want to update my location",
+        "I want to update a location",
+        "I want to add a location",
+        "i want to add",
+        "i want to add {locationidentifier} in {cityname}"
+      ],
+      "slots": [
+        {
+          "name": "locationidentifier",
+          "type": "location",
+          "samples": [
+            "{locationidentifier}"
+          ]
+        },
+        {
+          "name": "cityname",
+          "type": "AMAZON.EUROPE_CITY",
+          "samples": [
+            "in {cityname}",
+            "{cityname}"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Traveler",
+      "samples": [
+        "purchase a ticket",
+        "buy a ticket",
+        "i want to buy a ticket",
+        "i want to purchase a ticket",
+        "if i can travel",
+        "buy a ticket to {toCity} from {fromCity}",
+        "buy a ticket for {date} and {juncture} on {time}",
+        "buy a ticket for {date}",
+        "buy a ticket to {juncture} on {time}",
+        "buy a ticket to {toCity}",
+        "if i can {juncture} at {time}",
+        "buy a ticket from {fromCity} to {toCity}"
+      ],
+      "slots": [
+        {
+          "name": "toCity",
+          "type": "AMAZON.EUROPE_CITY",
+          "samples": [
+            "I want to go to {toCity}",
+            "I want to see {toCity}",
+            "I am going to {toCity}",
+            "{toCity}"
+          ]
+        },
+        {
+          "name": "fromCity",
+          "type": "AMAZON.EUROPE_CITY",
+          "samples": [
+            "I live in {fromCity}",
+            "I travel from {fromCity}",
+            "{fromCity}"
+          ]
+        },
+        {
+          "name": "date",
+          "type": "AMAZON.DATE",
+          "samples": []
+        },
+        {
+          "name": "juncture",
+          "type": "juncture",
+          "samples": []
+        },
+        {
+          "name": "time",
+          "type": "AMAZON.TIME",
+          "samples": []
+        }
+      ]
+    }
+  ],
+  "types": [
+    {
+      "name": "AMAZON.EUROPE_CITY",
+      "values": [
+        {
+          "id": null,
+          "name": {
+            "value": "home",
+            "synonyms": [
+              "house",
+              "Home",
+              "House"
+            ]
+          }
+        },
+        {
+          "id": "",
+          "name": {
+            "value": "work",
+            "synonyms": [
+              "Work"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "juncture",
+      "values": [
+        {
+          "id": null,
+          "name": {
+            "value": "arrive",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "depart",
+            "synonyms": []
+          }
+        }
+      ]
+    },
+    {
+      "name": "location",
+      "values": [
+        {
+          "id": null,
+          "name": {
+            "value": "work",
+            "synonyms": []
+          }
+        },
+        {
+          "id": null,
+          "name": {
+            "value": "home",
+            "synonyms": []
+          }
+        }
+      ]
+    }
+  ],
+  "prompts": [
+    {
+      "id": "Elicit.Intent-ChooseIntent.IntentSlot-option",
+      "promptVersion": "1.0",
+      "definitionVersion": "1.0",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "Please choose an option."
+        }
+      ]
+    },
+    {
+      "id": "Elicit.Intent-CompositionIntent.IntentSlot-numberOfPassengers",
+      "promptVersion": "1.0",
+      "definitionVersion": "1.0",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "With how many people do you travel?"
+        },
+        {
+          "type": "PlainText",
+          "value": "For how many people are you going to buy a ticket?"
+        },
+        {
+          "type": "PlainText",
+          "value": "How many people are in your household"
+        },
+        {
+          "type": "PlainText",
+          "value": "How many people are in your family"
+        }
+      ]
+    },
+    {
+      "id": "Elicit.Intent-LocationIntent.IntentSlot-locationidentifier",
+      "promptVersion": "1.0",
+      "definitionVersion": "1.0",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "How would you like to call this location?"
+        }
+      ]
+    },
+    {
+      "id": "Elicit.Intent-LocationIntent.IntentSlot-cityname",
+      "promptVersion": "1.0",
+      "definitionVersion": "1.0",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "In what city is this location?"
+        }
+      ]
+    },
+    {
+      "id": "Elicit.Intent-Traveler.IntentSlot-toCity",
+      "promptVersion": "1.0",
+      "definitionVersion": "1.0",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "Where are you going to?"
+        },
+        {
+          "type": "PlainText",
+          "value": "Where do you want to go?"
+        },
+        {
+          "type": "PlainText",
+          "value": "Where do you want to travel to?"
+        }
+      ]
+    },
+    {
+      "id": "Elicit.Intent-Traveler.IntentSlot-fromCity",
+      "promptVersion": "1.0",
+      "definitionVersion": "1.0",
+      "variations": [
+        {
+          "type": "PlainText",
+          "value": "Where are you travelling from?"
+        },
+        {
+          "type": "PlainText",
+          "value": "What is your origin city?"
+        },
+        {
+          "type": "PlainText",
+          "value": "What is your departure location?"
+        }
+      ]
+    }
+  ],
+  "dialog": {
+    "version": "1.0",
+    "intents": [
+      {
+        "name": "ChooseIntent",
+        "confirmationRequired": false,
+        "prompts": {},
+        "slots": [
+          {
+            "name": "option",
+            "type": "AMAZON.NUMBER",
+            "elicitationRequired": true,
+            "confirmationRequired": false,
+            "prompts": {
+              "elicit": "Elicit.Intent-ChooseIntent.IntentSlot-option"
+            }
+          }
+        ]
+      },
+      {
+        "name": "CompositionIntent",
+        "confirmationRequired": false,
+        "prompts": {},
+        "slots": [
+          {
+            "name": "numberOfPassengers",
+            "type": "AMAZON.NUMBER",
+            "elicitationRequired": true,
+            "confirmationRequired": false,
+            "prompts": {
+              "elicit": "Elicit.Intent-CompositionIntent.IntentSlot-numberOfPassengers"
+            }
+          }
+        ]
+      },
+      {
+        "name": "LocationIntent",
+        "confirmationRequired": false,
+        "prompts": {},
+        "slots": [
+          {
+            "name": "locationidentifier",
+            "type": "location",
+            "elicitationRequired": true,
+            "confirmationRequired": false,
+            "prompts": {
+              "elicit": "Elicit.Intent-LocationIntent.IntentSlot-locationidentifier"
+            }
+          },
+          {
+            "name": "cityname",
+            "type": "AMAZON.EUROPE_CITY",
+            "elicitationRequired": true,
+            "confirmationRequired": false,
+            "prompts": {
+              "elicit": "Elicit.Intent-LocationIntent.IntentSlot-cityname"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Traveler",
+        "confirmationRequired": false,
+        "prompts": {},
+        "slots": [
+          {
+            "name": "toCity",
+            "type": "AMAZON.EUROPE_CITY",
+            "elicitationRequired": true,
+            "confirmationRequired": false,
+            "prompts": {
+              "elicit": "Elicit.Intent-Traveler.IntentSlot-toCity"
+            }
+          },
+          {
+            "name": "fromCity",
+            "type": "AMAZON.EUROPE_CITY",
+            "elicitationRequired": true,
+            "confirmationRequired": false,
+            "prompts": {
+              "elicit": "Elicit.Intent-Traveler.IntentSlot-fromCity"
+            }
+          },
+          {
+            "name": "date",
+            "type": "AMAZON.DATE",
+            "elicitationRequired": false,
+            "confirmationRequired": false,
+            "prompts": {}
+          },
+          {
+            "name": "juncture",
+            "type": "juncture",
+            "elicitationRequired": false,
+            "confirmationRequired": false,
+            "prompts": {}
+          },
+          {
+            "name": "time",
+            "type": "AMAZON.TIME",
+            "elicitationRequired": false,
+            "confirmationRequired": false,
+            "prompts": {}
+          }
+        ]
+      }
+    ]
+  }
+}

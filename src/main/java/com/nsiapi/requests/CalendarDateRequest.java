@@ -1,8 +1,8 @@
 package com.nsiapi.requests;
 
-import com.requestInterface;
+import com.RequestInterface;
 
-public class CalendarDateRequest implements requestInterface {
+public class CalendarDateRequest implements RequestInterface {
     private String destinationCode;
     private String originCode;
     private String goToUrl = "calendardates/";

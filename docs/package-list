@@ -6,7 +6,6 @@ com.amazonapi.requests
 com.database
 com.database.models
 com.nsiapi
-com.nsiapi.models.Route
 com.nsiapi.models.booking
 com.nsiapi.models.calendardates
 com.nsiapi.models.calendarprices

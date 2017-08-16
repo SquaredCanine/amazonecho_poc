@@ -25,7 +25,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 
 /**
- * Created by doombringer on 7/24/2017.
+ * This class is used to get response from the ns international api
  */
 @SuppressWarnings("ConstantConditions")
 public class NSIApi {
@@ -33,9 +33,12 @@ public class NSIApi {
   private final String BASE_URL = "https://www.nsinternational.nl/api/v1.1/";
   private CloseableHttpClient client;
 
-  public NSIApi() {
-  }
-
+  /**
+   * Returns a model containing connections corresponding to the request
+   * @param PATRequest PriceAndTimeRequest
+   * @return an object filled  with JSON data
+   * @throws ParseException Throws this exception when JSON parsing fails or when the IO fails.
+   */
   public Connections getResponse(PriceAndTimeRequest PATRequest) throws ParseException {
     client = HttpClientBuilder.create().build();
     HttpGet request = new HttpGet(BASE_URL + PATRequest.getRequestUrl());
@@ -59,6 +62,12 @@ public class NSIApi {
     throw new ParseException("Het is helemaal kut");
   }
 
+  /**
+   * Returns a model containing station names corresponding to the request
+   * @param SNRequest StationNameRequest
+   * @return an object filled  with JSON data
+   * @throws ParseException Throws this exception when JSON parsing fails or when the IO fails.
+   */
   public Stations getResponse(StationNameRequest SNRequest) throws ParseException {
     client = HttpClientBuilder.create().build();
     HttpGet request = new HttpGet(BASE_URL + SNRequest.getRequestUrl());
@@ -83,6 +92,12 @@ public class NSIApi {
     throw new ParseException("Het is helemaal kut");
   }
 
+  /**
+   * Returns a model containing a signature and dnr ID for a provisional booking corresponding to the request
+   * @param PBRequest ProvisionalBookingRequest
+   * @return an object filled  with JSON data
+   * @throws ParseException Throws this exception when JSON parsing fails or when the IO fails.
+   */
   public Dnr getResponse(ProvisionalBookingRequest PBRequest) throws ParseException {
     client = HttpClientBuilder.create().build();
     HttpPost request = new HttpPost(BASE_URL + PBRequest.getRequestUrl());
@@ -108,6 +123,12 @@ public class NSIApi {
     throw new ParseException("Het is helemaal kut");
   }
 
+  /**
+   * Returns a model containing calendar dates corresponding to the request
+   * @param CDRequest CalendarDateRequest
+   * @return an object filled  with JSON data
+   * @throws ParseException Throws this exception when JSON parsing fails or when the IO fails.
+   */
   public Dates getResponse(CalendarDateRequest CDRequest) throws ParseException {
     client = HttpClientBuilder.create().build();
     HttpGet request = new HttpGet(BASE_URL + CDRequest.getRequestUrl());
@@ -132,6 +153,12 @@ public class NSIApi {
     throw new ParseException("Het is helemaal kut");
   }
 
+  /**
+   * Returns a model containing calendar prices corresponding to the request
+   * @param CPRequest CalendarPriceRequest
+   * @return an object filled  with JSON data
+   * @throws ParseException Throws this exception when JSON parsing fails or when the IO fails.
+   */
   public Prices getResponse(CalendarPriceRequest CPRequest) throws ParseException {
     client = HttpClientBuilder.create().build();
     HttpGet request = new HttpGet(BASE_URL + CPRequest.getRequestUrl());

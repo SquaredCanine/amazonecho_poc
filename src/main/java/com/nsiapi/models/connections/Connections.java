@@ -9,6 +9,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The JSON data from the getResponse(PriceandTimeRequest) is placed inside this object so it can be accessed.
+ */
 @SuppressWarnings("CanBeFinal")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({

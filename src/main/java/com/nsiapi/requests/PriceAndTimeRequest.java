@@ -7,7 +7,7 @@ import com.database.models.LocationsModel;
 import java.util.ArrayList;
 
 /**
- * Created by doombringer on 7/24/2017.
+ * This request is used to find connections corresponding to the origin, destination, date and time.
  */
 @SuppressWarnings({"FieldCanBeLocal", "StringConcatenationInLoop"})
 public class PriceAndTimeRequest implements RequestInterface {
@@ -21,7 +21,14 @@ public class PriceAndTimeRequest implements RequestInterface {
   private final String gotoUrl = "connections/";
   private boolean arrival = false;
 
-
+  /**
+   * Sets the request
+   * @param origin name of the origin
+   * @param destination name of the destination
+   * @param date String in the format YYYYMMDD
+   * @param time String in the format HHmm
+   * @param arrival set the boolean to true if the date and time are based upon arrival
+   */
   public PriceAndTimeRequest(String origin, String destination, String date, String time,
       boolean arrival) {
     this.date = date;
@@ -33,6 +40,13 @@ public class PriceAndTimeRequest implements RequestInterface {
     setTimetype();
   }
 
+  /**
+   * Sets the request
+   * @param originCode String containing the station code of the origin
+   * @param destinationCode String containing the station code of the destination
+   * @param date String in the format YYYYMMDD
+   * @param time String in the format HHmm
+   */
   public PriceAndTimeRequest(String originCode, String destinationCode, String date, String time) {
     this.originCode = originCode;
     this.destinationCode = destinationCode;
@@ -42,6 +56,10 @@ public class PriceAndTimeRequest implements RequestInterface {
     setTimetype();
   }
 
+  /**
+   * Sets the amount of passengers according to the database, if the database does not contain an amount of passengers.
+   * Then 1 passenger is selected.
+   */
   private void setPassengers() {
     CompositionModel model = chooseCitySpeechlet.DB
         .getComposition(chooseCitySpeechlet.UNIQUE_USER_ID);
@@ -56,6 +74,9 @@ public class PriceAndTimeRequest implements RequestInterface {
     }
   }
 
+  /**
+   * Sets the timetype according to the boolean.
+   */
   private void setTimetype() {
     if (arrival) {
       timetype = "&timetype=arrival";
@@ -64,6 +85,11 @@ public class PriceAndTimeRequest implements RequestInterface {
     }
   }
 
+  /**
+   * Converts a city name(or location like home or work) to a stationcode.
+   * @param original String containing the city name
+   * @return String containing the station code, default is "NLASC" (Amsterdam Centraal/Amsterdam)
+   */
   private String getCode(String original) {
     ArrayList<LocationsModel> locations = chooseCitySpeechlet.DB
         .getLocations(chooseCitySpeechlet.UNIQUE_USER_ID);
@@ -99,6 +125,11 @@ public class PriceAndTimeRequest implements RequestInterface {
     }
   }
 
+  /**
+   * Returns a URL to get the Connections from the API
+   * @return A String containg the correct URL for the API
+   * {@link com.RequestInterface#getRequestUrl()}
+   */
   public String getRequestUrl() {
     System.out.println(
         gotoUrl + originCode + "/" + destinationCode + "/" + date + "/" + time + "/outbound?"
@@ -107,10 +138,18 @@ public class PriceAndTimeRequest implements RequestInterface {
         + passengers + timetype);
   }
 
+  /**
+   * Getter for the originCode
+   * @return String originCode
+   */
   public String getOriginCode() {
     return originCode;
   }
 
+  /**
+   * Getter for the destinationCode
+   * @return String destinationCode
+   */
   public String getDestinationCode() {
     return destinationCode;
   }

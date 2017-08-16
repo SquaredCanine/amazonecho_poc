@@ -46,7 +46,9 @@ import java.util.Calendar;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
+/**
+ * This class contains all the functionality of the skill and will handle all the requests and intents.
+ */
 @SuppressWarnings("SameParameterValue")
 public class chooseCitySpeechlet implements Speechlet {
 
@@ -112,7 +114,8 @@ public class chooseCitySpeechlet implements Speechlet {
   /**
    * Contains a list of ordinal numbers used for presenting the journey options to the user
    */
-  private final String[] ORDINAL_NUMBER_LIST = new String[]{"first", "second", "third", "fourth", "fifth"};
+  private final String[] ORDINAL_NUMBER_LIST = new String[]{"first", "second", "third", "fourth",
+      "fifth"};
   /**
    * Indicates if the user is new, default is false
    */
@@ -122,13 +125,13 @@ public class chooseCitySpeechlet implements Speechlet {
    */
   private PriceAndTimeRequest cheapestRequest;
   /**
-   * After a traveler intent has been called, 3 journeys will be stored in this list (if there are 3 options
-   * available).
+   * After a traveler intent has been called, 3 journeys will be stored in this list (if there are 3
+   * options available).
    */
   private ArrayList<Connection> connectionOptions;
   /**
-   * After the traveler intent has been called and executed, this boolean will be set to true. This means
-   * the choose intent can be handled.
+   * After the traveler intent has been called and executed, this boolean will be set to true. This
+   * means the choose intent can be handled.
    */
   private boolean journeyHasBeenSelected = false;
 
@@ -150,9 +153,10 @@ public class chooseCitySpeechlet implements Speechlet {
   private String time = "";
 
   /**
-   * This function is the first to be called when the skill is activated, in here the date and time are set for use in the requests.
-   * The Amazon user ID is collected and stored.
-   * And the database is called to see if this is a new user, if the user is new isNewUser is set to true.
+   * This function is the first to be called when the skill is activated, in here the date and time
+   * are set for use in the requests. The Amazon user ID is collected and stored. And the database
+   * is called to see if this is a new user, if the user is new isNewUser is set to true.
+   *
    * @param request Amazon sends this to the lambda function. Contains request ID.
    * @param session Contains the user ID, session ID and authentication token.
    * @throws SpeechletException A SpeechletException
@@ -172,9 +176,10 @@ public class chooseCitySpeechlet implements Speechlet {
   }
 
   /**
-   * This function is called when the skill is activated without an intent, "Alexa, Start NSI".
-   * It checks if the user has an acces token, if not it returns a linkaccountcard, if yes it adds the user to the database.
-   * This function calls the getUpdatedResponse.
+   * This function is called when the skill is activated without an intent, "Alexa, Start NSI". It
+   * checks if the user has an acces token, if not it returns a linkaccountcard, if yes it adds the
+   * user to the database. This function calls the getUpdatedResponse.
+   *
    * @param request Amazon's LaunchRequest, contains requestID.
    * @param session Amazon's Session, contains Session ID, accestoken and User ID.
    * @return A speechletResponse from getUpdatedResponse
@@ -196,8 +201,9 @@ public class chooseCitySpeechlet implements Speechlet {
   }
 
   /**
-   * This function is called when the skill is activated with an intent. A function corresponding to the intent is called.
-   * It also checks if the user is new and if the user has an access token.
+   * This function is called when the skill is activated with an intent. A function corresponding to
+   * the intent is called. It also checks if the user is new and if the user has an access token.
+   *
    * @param request IntentRequest contains requestID and the Intent.
    * @param session Session contains session ID.
    * @return Returns a speechletResponse from the correct function.
@@ -257,8 +263,9 @@ public class chooseCitySpeechlet implements Speechlet {
   }
 
   /**
-   * This function is called after the skill has done its thing. Created by Amazon.
-   * Cleanup logic goes here.
+   * This function is called after the skill has done its thing. Created by Amazon. Cleanup logic
+   * goes here.
+   *
    * @param request SessionEndedRequest, amazon stuff.
    * @param session Session, amazon stuff.
    * @throws SpeechletException A SpeechletException.
@@ -272,9 +279,11 @@ public class chooseCitySpeechlet implements Speechlet {
   }
 
   /**
-   * This function is called when the intent equals "Traveler". It asks the NS International API for all the connections corresponding
-   * to the date,time,origin,destination and arrival or departure. And selects a maximum of 3 connections to read back to the user.
-   * If connections could be retrieved the boolean journeyHasBeenSelected is set to true.
+   * This function is called when the intent equals "Traveler". It asks the NS International API for
+   * all the connections corresponding to the date,time,origin,destination and arrival or departure.
+   * And selects a maximum of 3 connections to read back to the user. If connections could be
+   * retrieved the boolean journeyHasBeenSelected is set to true.
+   *
    * @param intent a Traveler intent
    * @return Returns a speechletResponse
    */
@@ -371,9 +380,11 @@ public class chooseCitySpeechlet implements Speechlet {
   }
 
   /**
-   * This function is called when the intent equals "ChooseIntent" and the boolean journeyHasBeenSelected equals true.
-   * It creates a provisional booking for the selected journey and mails it to the user.
-   * It also gives a quick recap of the selected journey, and sends a card to the interface with a picture.
+   * This function is called when the intent equals "ChooseIntent" and the boolean
+   * journeyHasBeenSelected equals true. It creates a provisional booking for the selected journey
+   * and mails it to the user. It also gives a quick recap of the selected journey, and sends a card
+   * to the interface with a picture.
+   *
    * @param intent a ChooseIntent intent
    * @return a speechletResponse
    */
@@ -436,8 +447,9 @@ public class chooseCitySpeechlet implements Speechlet {
   }
 
   /**
-   * This function is called when the skill is activated without an intent. It gets the first journey from the database,
-   * and checks if it is delayed.
+   * This function is called when the skill is activated without an intent. It gets the first
+   * journey from the database, and checks if it is delayed.
+   *
    * @return a speechletResponse
    */
   private SpeechletResponse getUpdatedResponse() {
@@ -470,8 +482,10 @@ public class chooseCitySpeechlet implements Speechlet {
   }
 
   /**
-   * This function is called when the intent equals "LocationIntent". It stores the station of the selected city under the identifier of the location in the database.
-   * Identifier must be home or work.
+   * This function is called when the intent equals "LocationIntent". It stores the station of the
+   * selected city under the identifier of the location in the database. Identifier must be home or
+   * work.
+   *
    * @param intent a LocationIntent
    * @return Returns a speechletResponse
    */
@@ -499,8 +513,9 @@ public class chooseCitySpeechlet implements Speechlet {
   }
 
   /**
-   * This function is called when the intent equals "Composition Intent". It stores the number of people the user wants to book tickets for
-   * in the database.
+   * This function is called when the intent equals "Composition Intent". It stores the number of
+   * people the user wants to book tickets for in the database.
+   *
    * @param intent a CompositionIntent
    * @return Returns a speechletResponse
    */
@@ -522,8 +537,10 @@ public class chooseCitySpeechlet implements Speechlet {
   }
 
   /**
-   * This function is called when the intent equals "Cheapest". If a cheapest journey already has been selected, it will execute bookCheapestOption.
-   * If no cheapest journey has been selected, it will execute getCheapestOptionFromServer
+   * This function is called when the intent equals "Cheapest". If a cheapest journey already has
+   * been selected, it will execute bookCheapestOption. If no cheapest journey has been selected, it
+   * will execute getCheapestOptionFromServer
+   *
    * @param intent a Cheapest intent
    * @return Returns a speechletResponse
    */
@@ -536,8 +553,11 @@ public class chooseCitySpeechlet implements Speechlet {
   }
 
   /**
-   * This function is called when no cheapest journey has been selected. It returns the cheapest date and price for the journey from the origin to the destination.
-   * If the origin is empty Amsterdam Centraal is selected. After the cheapest date and price is returned, the user can book the journey.
+   * This function is called when no cheapest journey has been selected. It returns the cheapest
+   * date and price for the journey from the origin to the destination. If the origin is empty
+   * Amsterdam Centraal is selected. After the cheapest date and price is returned, the user can
+   * book the journey.
+   *
    * @param intent a Cheapest intent
    * @return Returns a speechletResponse
    */
@@ -596,7 +616,9 @@ public class chooseCitySpeechlet implements Speechlet {
   }
 
   /**
-   * This function is called when the cheapest journey has been selected. It creates a provisional booking and sends an email to the user.
+   * This function is called when the cheapest journey has been selected. It creates a provisional
+   * booking and sends an email to the user.
+   *
    * @return a speechletResponse
    */
   private SpeechletResponse bookCheapestOption() {
@@ -626,8 +648,10 @@ public class chooseCitySpeechlet implements Speechlet {
   }
 
   /**
-   * This functions adds a user to the database, it asks the amazon api for name and email using the accestoken.
-   * The user is stored in the database with the Amazon User ID, Amazon name and Amazon email.
+   * This functions adds a user to the database, it asks the amazon api for name and email using the
+   * accestoken. The user is stored in the database with the Amazon User ID, Amazon name and Amazon
+   * email.
+   *
    * @param accestoken String containing the accesstoken from Session
    */
   private void addUser(String accestoken) {
@@ -638,7 +662,9 @@ public class chooseCitySpeechlet implements Speechlet {
   }
 
   /**
-   * This function is called when the user is new, it asks the user for how many people the user wants to book a ticket.
+   * This function is called when the user is new, it asks the user for how many people the user
+   * wants to book a ticket.
+   *
    * @return Returns a speechletResponse
    */
   private SpeechletResponse newUser() {
@@ -654,7 +680,9 @@ public class chooseCitySpeechlet implements Speechlet {
   }
 
   /**
-   * This function is called when no accesstoken is available, it tells the user to link his amazon account with the skill.
+   * This function is called when no accesstoken is available, it tells the user to link his amazon
+   * account with the skill.
+   *
    * @return a speechletResponse
    */
   private SpeechletResponse linkaccountCard() {
@@ -666,6 +694,7 @@ public class chooseCitySpeechlet implements Speechlet {
 
   /**
    * This function is called when a journey has been selected.
+   *
    * @return returns an image corresponding to the destination.
    */
   private Image createDestinationImage() {
@@ -707,8 +736,8 @@ public class chooseCitySpeechlet implements Speechlet {
   }
 
   /**
-   * This function is called to initialize the date and time, it selects the current date and time. And stores it in the variables
-   * date and time
+   * This function is called to initialize the date and time, it selects the current date and time.
+   * And stores it in the variables date and time
    */
   private void initializeDateandTime() {
     Calendar cal = Calendar.getInstance();
@@ -721,6 +750,7 @@ public class chooseCitySpeechlet implements Speechlet {
 
   /**
    * Parse the time from HH:mm to HHmm
+   *
    * @param newTime String in the format HH:mm
    * @return Returns a String in the format HHmm
    */
@@ -747,6 +777,7 @@ public class chooseCitySpeechlet implements Speechlet {
 
   /**
    * Parses the data from YYYY-MM-DD to YYYYMMDD
+   *
    * @param newDate date String in the format YYYY-MM-DD
    * @return date String in the format YYYYMMDD
    */
@@ -755,8 +786,9 @@ public class chooseCitySpeechlet implements Speechlet {
   }
 
   /**
-   * This function is called for a dialog with the user. If information is missing from the intent, then this function will ask
-   * for more information from the user.
+   * This function is called for a dialog with the user. If information is missing from the intent,
+   * then this function will ask for more information from the user.
+   *
    * @return Returns a speechletResponse
    */
   private SpeechletResponse delegateDirective() {
@@ -780,7 +812,8 @@ public class chooseCitySpeechlet implements Speechlet {
    * @param card the card to be shown to the user on the alexa web interface
    * @return SpeechletResponse the speechlet response
    */
-  private SpeechletResponse newAskResponse(String stringOutput, String repromptText,StandardCard card) {
+  private SpeechletResponse newAskResponse(String stringOutput, String repromptText,
+      StandardCard card) {
     PlainTextOutputSpeech outputSpeech = new PlainTextOutputSpeech();
     outputSpeech.setText(stringOutput);
 

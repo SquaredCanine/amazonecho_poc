@@ -155,7 +155,7 @@ public class chooseCitySpeechlet implements Speechlet {
    * And the database is called to see if this is a new user, if the user is new isNewUser is set to true.
    * @param request Amazon sends this to the lambda function. Contains request ID.
    * @param session Contains the user ID, session ID and authentication token.
-   * @throws SpeechletException
+   * @throws SpeechletException A SpeechletException
    */
   @Override
   public void onSessionStarted(final SessionStartedRequest request, final Session session)
@@ -628,7 +628,7 @@ public class chooseCitySpeechlet implements Speechlet {
   /**
    * This functions adds a user to the database, it asks the amazon api for name and email using the accestoken.
    * The user is stored in the database with the Amazon User ID, Amazon name and Amazon email.
-   * @param accestoken
+   * @param accestoken String containing the accesstoken from Session
    */
   private void addUser(String accestoken) {
     AmazonApi aapi = new AmazonApi();

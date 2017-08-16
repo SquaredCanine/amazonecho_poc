@@ -57,6 +57,6 @@ public class AmazonApi {
       System.out.println("IOException " + IoE.getMessage());
 
     }
-    throw new ParseException("Het is helemaal kut");
+    throw new ParseException("Nothing could be returned");
   }
 }

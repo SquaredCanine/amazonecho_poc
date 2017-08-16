@@ -1,5 +1,6 @@
 package com.amazonapi.models;
 
+
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -9,6 +10,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The model for the amazon user
+ */
 @SuppressWarnings("CanBeFinal")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({

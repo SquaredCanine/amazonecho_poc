@@ -16,12 +16,21 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 
+/**
+ * This class is used for Amazon API calls
+ */
 @SuppressWarnings({"FieldCanBeLocal", "ConstantConditions"})
 public class AmazonApi {
 
   private final String BASE_URL = "https://api.amazon.com/user/profile?access_token=";
   private CloseableHttpClient client;
 
+  /**
+   *
+   * @param GUR GetUserRequest request
+   * @return a model containing information about the amazon user
+   * @throws ParseException Throws a ParsException when nothing can be returned.
+   */
   public AmazonUser getResponse(GetUserRequest GUR) throws ParseException {
     client = HttpClientBuilder.create().build();
     HttpGet request = null;

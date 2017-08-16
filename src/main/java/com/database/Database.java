@@ -11,6 +11,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * This class is used for all the database modifications like adding,updating and removing
+ * aUID stands for amazon USER ID or UNIQUE_USER_ID
+ */
 public class Database {
 
   private Connection con = null;

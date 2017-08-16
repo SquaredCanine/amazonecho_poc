@@ -1,5 +1,8 @@
 package com.database.models;
 
+/**
+ * Database table 'Journey' data is put in this object.
+ */
 public class JourneyModel {
 
   private String UID;
@@ -10,6 +13,15 @@ public class JourneyModel {
   private String departuredate;
   private String orderprice;
 
+  /**
+   * Constructor
+   * @param identifier String containing a number
+   * @param originCode String containing the station code origin
+   * @param destinationCode String containing the station code destination
+   * @param departuretime String containing the departure time from the origin
+   * @param departuredate String containing the departure date from the origin
+   * @param orderprice String containing the orderPrice
+   */
   public JourneyModel(String identifier, String originCode, String destinationCode,
       String departuretime, String departuredate, String orderprice) {
     this.identifier = identifier;

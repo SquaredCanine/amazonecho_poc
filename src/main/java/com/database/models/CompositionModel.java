@@ -1,10 +1,17 @@
 package com.database.models;
 
+/**
+ * Database table 'Composition' data is put in this object.
+ */
 public class CompositionModel {
 
   private String UID;
   private int numberOfPassengers;
 
+  /**
+   * Constructor
+   * @param numberOfPassengers number of passengers
+   */
   public CompositionModel(int numberOfPassengers) {
     this.numberOfPassengers = numberOfPassengers;
   }

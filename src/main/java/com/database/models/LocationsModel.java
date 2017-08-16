@@ -1,5 +1,8 @@
 package com.database.models;
 
+/**
+ * Database table 'Locations' data is put in this object.
+ */
 public class LocationsModel {
 
   private String UID;
@@ -7,6 +10,12 @@ public class LocationsModel {
   private String city;
   private String stationCode;
 
+  /**
+   * Constructor
+   * @param identifier String containing the identifier of the location
+   * @param city String containing the city name of the location
+   * @param stationCode String containing the station code of the location
+   */
   public LocationsModel(String identifier, String city, String stationCode) {
     this.identifier = identifier;
     this.city = city;

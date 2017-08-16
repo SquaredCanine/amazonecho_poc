@@ -6,6 +6,9 @@ import org.apache.commons.mail.Email;
 import org.apache.commons.mail.EmailException;
 import org.apache.commons.mail.SimpleEmail;
 
+/**
+ * This class is used to send an email to the users
+ */
 public class MailClient {
 
   private final String gotoUrl;
@@ -14,12 +17,22 @@ public class MailClient {
   private final Connection journey;
   private final String userEmail;
 
+  /**
+   * Constructor
+   * @param gotoUrl String containing the provisional booking url
+   * @param journey Connection containing the journey for which the provisional booking was made
+   * @param userEmail String containing the email of the user
+   */
   public MailClient(String gotoUrl, Connection journey, String userEmail) {
     this.gotoUrl = gotoUrl;
     this.journey = journey;
     this.userEmail = userEmail;
   }
 
+  /**
+   * Sends an email with a fixed body containing provisional booking url, small recap of the journey.
+   * The email is send to the email of the user.
+   */
   public void sendMail() {
     Email email = new SimpleEmail();
     email.setHostName("smtp.googlemail.com");

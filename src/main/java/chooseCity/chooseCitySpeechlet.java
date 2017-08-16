@@ -51,51 +51,51 @@ import org.slf4j.LoggerFactory;
 public class chooseCitySpeechlet implements Speechlet {
 
   /**
-   * DB gets used for every database modification.
+   * Is used for every database modification.
    */
   public static final Database DB = new Database();
   /**
-   * API gets used for every NS international request
+   * Is used for every NS international API request
    */
   private static final NSIApi API = new NSIApi();
   /**
-   * log is the selected logger
+   * Is the selected logger
    */
   private static final Logger log = LoggerFactory.getLogger(chooseCitySpeechlet.class);
   /**
-   * DATE_SLOT points to date slot
+   * Contains the name of the date slot
    */
   private static final String DATE_SLOT = "date";
   /**
-   * CITY_ORIGIN points to fromCity slot
+   * Contains the name of the fromCity slot
    */
   private static final String CITY_ORIGIN = "fromCity";
   /**
-   * CITY_DESTINATION points to toCity slot
+   * Contains the name of the toCity slot
    */
   private static final String CITY_DESTINATION = "toCity";
   /**
-   * OPTION points to option slot
+   * Contains the name of the option slot
    */
   private static final String OPTION = "option";
   /**
-   * LOCATION points to locationidentifier slot
+   * Contains the name of the locationidentifier slot
    */
   private static final String LOCATION = "locationidentifier";
   /**
-   * CITY points to cityname slot
+   * Contains the name of the cityname slot
    */
   private static final String CITY = "cityname";
   /**
-   * COMPOSITION points to numberOfPassengers slot
+   * Contains the name of the numberOfPassengers slot
    */
   private static final String COMPOSITION = "numberOfPassengers";
   /**
-   * JUNCTURE points to juncture slot
+   * Contains the name of the juncture slot
    */
   private static final String JUNCTURE = "juncture";
   /**
-   * TIME points to time slot
+   * Contains the name of the time slot
    */
   private static final String TIME = "time";
 
@@ -121,13 +121,11 @@ public class chooseCitySpeechlet implements Speechlet {
    * Request containing the cheapest journey
    */
   private PriceAndTimeRequest cheapestRequest;
-
   /**
    * After a traveler intent has been called, 3 journeys will be stored in this list (if there are 3 options
    * available).
    */
   private ArrayList<Connection> connectionOptions;
-
   /**
    * After the traveler intent has been called and executed, this boolean will be set to true. This means
    * the choose intent can be handled.
@@ -135,27 +133,29 @@ public class chooseCitySpeechlet implements Speechlet {
   private boolean journeyHasBeenSelected = false;
 
   /**
-   * date The date used for requests in the format: YYYYMMDD
+   * The date used for requests in the format: YYYYMMDD
    */
   private String date = "";
   /**
-   * origin The place of departure (name) like: Amsterdam,Paris,Berlin or London.
+   * The place of departure (name) like: Amsterdam,Paris,Berlin or London.
    */
   private String origin = "";
   /**
-   * destination The arrival location (name) like: Amsterdam,Paris,Berlin or London.
+   * The arrival location (name) like: Amsterdam,Paris,Berlin or London.
    */
   private String destination = "";
   /**
-   * time The time used for the requests in the format: HHmm
+   * The time used for the requests in the format: HHmm
    */
   private String time = "";
 
   /**
-   * Deze functie word als eerste aangeroepen als de skill word geactiveerd, meeste hiervan is
-   * geschreven door Amazon. Maar ik stel hier ook de huidige tijd en datum in zodat ik een request
-   * kan uitvoeren als dat nodig is. Gebruiker word toegevoegd aan de com.database. Naam is een
-   * placeholder, kan worden aangepast als account linking word toegepast.
+   * This function is the first to be called when the skill is activated, in here the date and time are set for use in the requests.
+   * The Amazon user ID is collected and stored.
+   * And the database is called to see if this is a new user, if the user is new isNewUser is set to true.
+   * @param request Amazon sends this to the lambda function. Contains request ID.
+   * @param session Contains the user ID, session ID and authentication token.
+   * @throws SpeechletException
    */
   @Override
   public void onSessionStarted(final SessionStartedRequest request, final Session session)
@@ -172,9 +172,13 @@ public class chooseCitySpeechlet implements Speechlet {
   }
 
   /**
-   * Deze functie word aangeroepen als de skill word gestart zonder intent. De functie roept hierna
-   * getUpdatedResponse aan, deze zal de gebruiker op de hoogte brengen van eventuele veranderingen
-   * in zijn geboekte reizen.
+   * This function is called when the skill is activated without an intent, "Alexa, Start NSI".
+   * It checks if the user has an acces token, if not it returns a linkaccountcard, if yes it adds the user to the database.
+   * This function calls the getUpdatedResponse.
+   * @param request Amazon's LaunchRequest, contains requestID.
+   * @param session Amazon's Session, contains Session ID, accestoken and User ID.
+   * @return A speechletResponse from getUpdatedResponse
+   * @throws SpeechletException A SpeechletException.
    */
   @Override
   public SpeechletResponse onLaunch(final LaunchRequest request, final Session session)
@@ -192,8 +196,12 @@ public class chooseCitySpeechlet implements Speechlet {
   }
 
   /**
-   * Als de skill word aangeroepen met een intent, gebeurt dat hier. Er word gecheckt welke Intent
-   * het is, en daarna word de bijbehorende functie aangeroepen.
+   * This function is called when the skill is activated with an intent. A function corresponding to the intent is called.
+   * It also checks if the user is new and if the user has an access token.
+   * @param request IntentRequest contains requestID and the Intent.
+   * @param session Session contains session ID.
+   * @return Returns a speechletResponse from the correct function.
+   * @throws SpeechletException A SpeechletException.
    */
   @Override
   public SpeechletResponse onIntent(final IntentRequest request, final Session session)
@@ -249,7 +257,11 @@ public class chooseCitySpeechlet implements Speechlet {
   }
 
   /**
-   * Functie die als laatst word aangeroepen, hier doe ik momenteel niks mee.
+   * This function is called after the skill has done its thing. Created by Amazon.
+   * Cleanup logic goes here.
+   * @param request SessionEndedRequest, amazon stuff.
+   * @param session Session, amazon stuff.
+   * @throws SpeechletException A SpeechletException.
    */
   @Override
   public void onSessionEnded(final SessionEndedRequest request, final Session session)

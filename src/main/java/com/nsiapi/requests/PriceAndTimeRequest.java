@@ -64,8 +64,7 @@ public class PriceAndTimeRequest implements RequestInterface {
     CompositionModel model = chooseCitySpeechlet.DB
         .getComposition(chooseCitySpeechlet.UNIQUE_USER_ID);
     passengers = "passengers=";
-    if (model == null || model.getUID() == null || model.getUID().equals("")
-        || model.getNumberOfPassengers() == 0) {
+    if (model == null || model.getNumberOfPassengers() == 0) {
       passengers += "A,";
     } else {
       for (int i = 0; i < model.getNumberOfPassengers(); i++) {

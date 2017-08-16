@@ -1,4 +1,4 @@
-package chooseCity;
+package nl.nsi.demo.echo;
 
 import static com.amazon.speech.speechlet.IntentRequest.DialogState.IN_PROGRESS;
 import static com.amazon.speech.speechlet.IntentRequest.DialogState.STARTED;
@@ -50,7 +50,7 @@ import org.slf4j.LoggerFactory;
  * This class contains all the functionality of the skill and will handle all the requests and intents.
  */
 @SuppressWarnings("SameParameterValue")
-public class chooseCitySpeechlet implements Speechlet {
+public class NSInternationalSpeechlet implements Speechlet {
 
   /**
    * Is used for every database modification.
@@ -63,7 +63,7 @@ public class chooseCitySpeechlet implements Speechlet {
   /**
    * Is the selected logger
    */
-  private static final Logger log = LoggerFactory.getLogger(chooseCitySpeechlet.class);
+  private static final Logger log = LoggerFactory.getLogger(NSInternationalSpeechlet.class);
   /**
    * Contains the name of the date slot
    */
@@ -371,7 +371,7 @@ public class chooseCitySpeechlet implements Speechlet {
           "Something went wrong with collection data of your journey, please try again later");
     }
     StandardCard card = new StandardCard();
-    card.setTitle("chooseCity");
+    card.setTitle("nl");
     card.setText(speechText.toString());
 
     String repromptText = "If you want to cancel the order, just say exit.";
@@ -420,13 +420,13 @@ public class chooseCitySpeechlet implements Speechlet {
         selectedJourney.getDBDepartureDate(),
         selectedJourney.getOffers().get(0).getSalesPrice().getAmount());
     ProvisionalBookingRequest request = new ProvisionalBookingRequest(
-        chooseCitySpeechlet.UNIQUE_NS_ID,
+        NSInternationalSpeechlet.UNIQUE_NS_ID,
         selectedJourney.getId(),
         selectedJourney.getOffers().get(0).getId(),
         "true",
         selectedJourney.getOrigin().getCode(),
         selectedJourney.getDestination().getCode());
-    Dnr model = chooseCitySpeechlet.API.getResponse(request);
+    Dnr model = NSInternationalSpeechlet.API.getResponse(request);
 
     String gotoUrl = ("https://www.nsinternational.nl/en/traintickets#/passengers/" + model
         .getData().getDnrId() + "?signature=" + model.getData().getSignature());
@@ -626,13 +626,13 @@ public class chooseCitySpeechlet implements Speechlet {
     UNIQUE_NS_ID = data.getData().getUid();
     Connection selectedJourney = data.getData().getConnections().get(0);
     ProvisionalBookingRequest request = new ProvisionalBookingRequest(
-        chooseCitySpeechlet.UNIQUE_NS_ID,
+        NSInternationalSpeechlet.UNIQUE_NS_ID,
         selectedJourney.getId(),
         selectedJourney.getOffers().get(1).getId(),
         "true",
         selectedJourney.getOrigin().getCode(),
         selectedJourney.getDestination().getCode());
-    Dnr model = chooseCitySpeechlet.API.getResponse(request);
+    Dnr model = NSInternationalSpeechlet.API.getResponse(request);
 
     String gotoUrl = ("https://www.nsinternational.nl/en/traintickets#/passengers/" + model
         .getData().getDnrId() + "?signature=" + model.getData().getSignature());

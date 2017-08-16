@@ -1,6 +1,6 @@
 package com.nsiapi.requests;
 
-import chooseCity.chooseCitySpeechlet;
+import nl.nsi.demo.echo.NSInternationalSpeechlet;
 import com.RequestInterface;
 import com.database.models.CompositionModel;
 import com.database.models.LocationsModel;
@@ -61,8 +61,8 @@ public class PriceAndTimeRequest implements RequestInterface {
    * Then 1 passenger is selected.
    */
   private void setPassengers() {
-    CompositionModel model = chooseCitySpeechlet.DB
-        .getComposition(chooseCitySpeechlet.UNIQUE_USER_ID);
+    CompositionModel model = NSInternationalSpeechlet.DB
+        .getComposition(NSInternationalSpeechlet.UNIQUE_USER_ID);
     passengers = "passengers=";
     if (model == null || model.getNumberOfPassengers() == 0) {
       passengers += "A,";
@@ -90,8 +90,8 @@ public class PriceAndTimeRequest implements RequestInterface {
    * @return String containing the station code, default is "NLASC" (Amsterdam Centraal/Amsterdam)
    */
   private String getCode(String original) {
-    ArrayList<LocationsModel> locations = chooseCitySpeechlet.DB
-        .getLocations(chooseCitySpeechlet.UNIQUE_USER_ID);
+    ArrayList<LocationsModel> locations = NSInternationalSpeechlet.DB
+        .getLocations(NSInternationalSpeechlet.UNIQUE_USER_ID);
     switch (original) {
       case "Berlin":
         System.out.println("DEBHF");

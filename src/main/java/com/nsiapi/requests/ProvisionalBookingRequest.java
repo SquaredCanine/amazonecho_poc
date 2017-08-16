@@ -1,6 +1,6 @@
 package com.nsiapi.requests;
 
-import chooseCity.chooseCitySpeechlet;
+import nl.nsi.demo.echo.NSInternationalSpeechlet;
 import com.RequestInterface;
 import com.database.models.CompositionModel;
 
@@ -45,8 +45,8 @@ public class ProvisionalBookingRequest implements RequestInterface {
    * Then 1 passenger is selected.
    */
   private void setPassengers() {
-    CompositionModel model = chooseCitySpeechlet.DB
-        .getComposition(chooseCitySpeechlet.UNIQUE_USER_ID);
+    CompositionModel model = NSInternationalSpeechlet.DB
+        .getComposition(NSInternationalSpeechlet.UNIQUE_USER_ID);
     passengers = "";
     if (model == null || model.getNumberOfPassengers() == 0) {
       passengers += "A,";

@@ -101,24 +101,24 @@ public class chooseCitySpeechlet implements Speechlet {
 
 
   /**
-   * UNIQUE_NS_ID contains the user ID from the NS International API
+   * Contains the user ID from the NS International API
    */
   @SuppressWarnings("WeakerAccess")
   public static String UNIQUE_NS_ID = "";
   /**
-   * UNIQUE_USER_ID contains the User ID from the echo
+   * Contains the User ID from the echo
    */
   public static String UNIQUE_USER_ID = "";
   /**
-   * ORDINAL_NUMBER_LIST Contains a list of ordinal numbers used for presenting the journey options to the user
+   * Contains a list of ordinal numbers used for presenting the journey options to the user
    */
   private final String[] ORDINAL_NUMBER_LIST = new String[]{"first", "second", "third", "fourth", "fifth"};
   /**
-   * isNewUser indicates if the user is new, default is false
+   * Indicates if the user is new, default is false
    */
   private boolean isNewUser = false;
   /**
-   * cheapestRequest Request containing the cheapest journey
+   * Request containing the cheapest journey
    */
   private PriceAndTimeRequest cheapestRequest;
 

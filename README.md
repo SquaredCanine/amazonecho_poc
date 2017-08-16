@@ -2,15 +2,15 @@
 <a href="https://squaredcanine.github.io/amazonecho_poc">Java Docs</a><br>
 For NS International I made an application for the Amazon Echo, which allows you to order tickets to popular destinations in Europe.
 
-To make it work for you you need to add a java file in src/main/java/nl. containing the following:
+To make it work for you you need to add a java file in src/main/java/nl/nsi/demo/echo/ named NSInternationalSpeechletRequestStreamHandler.java and must contain the following:
 
 ```java
-package chooseCity;
+package nl.nsi.demo.echo;
 
+import com.amazon.speech.speechlet.lambda.SpeechletRequestStreamHandler;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.amazon.speech.speechlet.lambda.SpeechletRequestStreamHandler;
 
 /**
  * This class could be the handler for an AWS Lambda function powering an Alexa Skills Kit
@@ -18,7 +18,7 @@ import com.amazon.speech.speechlet.lambda.SpeechletRequestStreamHandler;
  *nlnlroject using the {@code lambda-compile} Ant task and upload the resulting zip file to power
  * your function.
  */
-public final class chooseCitySpeechletRequestStreamHandler extends SpeechletRequestStreamHandler {
+public final class NSInternationalSpeechletRequestStreamHandler extends SpeechletRequestStreamHandler {
     private static final Set<String> supportedApplicationIds;
 
     static {

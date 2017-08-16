@@ -34,8 +34,10 @@ public class Database {
       con = DriverManager.getConnection(host, uName, uPass);
       System.out.println("succeeded");
 
-    } catch (Exception E) {
-      System.out.println("Helaas" + E.getMessage());
+    } catch (ClassNotFoundException CNFE) {
+      System.out.println("Could not find the class " + CNFE.getMessage());
+    } catch (SQLException SQLE){
+      System.out.println("Something went wrong with sql " + SQLE.getMessage());
     }
   }
 
@@ -119,8 +121,8 @@ public class Database {
 
       ri = ps.executeUpdate();
       ri = 0;
-    } catch (Exception e) {
-      System.out.println("jammer man" + e.getMessage());
+    } catch (SQLException SQLE) {
+      System.out.println("Something went wrong with SQL " + SQLE.getMessage());
     }
   }
 

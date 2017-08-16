@@ -24,7 +24,7 @@ public class CalendarPriceRequest implements RequestInterface {
 
   /**
    * Returns a URL to get the Calendar prices from the API
-   * @return A String containg the correct URL for the API
+   * @return A String containing the correct URL for the API
    * {@link com.RequestInterface#getRequestUrl()}
    */
   public String getRequestUrl() {

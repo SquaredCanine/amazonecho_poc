@@ -46,7 +46,7 @@ public class NSIApi {
     try {
       response = client.execute(request);
     } catch (IOException IoE) {
-      System.out.println("Fout tijdens het opvragen van de response " + IoE.getMessage());
+      System.out.println("IOException " + IoE.getMessage());
     }
     GsonBuilder builder = new GsonBuilder();
     Gson gson = builder.create();
@@ -76,7 +76,7 @@ public class NSIApi {
     try {
       response = client.execute(request);
     } catch (IOException IoE) {
-      System.out.println("Fout tijdens het opvragen van de response " + IoE.getMessage());
+      System.out.println("IOException " + IoE.getMessage());
     }
     GsonBuilder builder = new GsonBuilder();
     Gson gson = builder.create();
@@ -107,7 +107,7 @@ public class NSIApi {
       request.setEntity(new StringEntity(PBRequest.getRequestBody()));
       response = client.execute(request);
     } catch (IOException IoE) {
-      System.out.println("Fout tijdens het opvragen van de response " + IoE.getMessage());
+      System.out.println("IOException " + IoE.getMessage());
     }
     GsonBuilder builder = new GsonBuilder();
     Gson gson = builder.create();
@@ -137,7 +137,7 @@ public class NSIApi {
     try {
       response = client.execute(request);
     } catch (IOException IoE) {
-      System.out.println("Fout tijdens het opvragen van de response " + IoE.getMessage());
+      System.out.println("IOException " + IoE.getMessage());
     }
     GsonBuilder builder = new GsonBuilder();
     Gson gson = builder.create();
@@ -167,7 +167,7 @@ public class NSIApi {
     try {
       response = client.execute(request);
     } catch (IOException IoE) {
-      System.out.println("Fout tijdens het opvragen van de response " + IoE.getMessage());
+      System.out.println("IOException " + IoE.getMessage());
     }
     GsonBuilder builder = new GsonBuilder();
     Gson gson = builder.create();

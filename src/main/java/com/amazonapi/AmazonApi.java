@@ -43,7 +43,7 @@ public class AmazonApi {
     try {
       response = client.execute(request);
     } catch (IOException IoE) {
-      System.out.println("Fout tijdens het opvragen van de response " + IoE.getMessage());
+      System.out.println("IOException " + IoE.getMessage());
     }
     GsonBuilder builder = new GsonBuilder();
     Gson gson = builder.create();

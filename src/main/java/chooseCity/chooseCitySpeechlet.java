@@ -177,11 +177,11 @@ public class chooseCitySpeechlet implements Speechlet {
 
   /**
    * This function is called when the skill is activated without an intent, "Alexa, Start NSI". It
-   * checks if the user has an acces token, if not it returns a linkaccountcard, if yes it adds the
+   * checks if the user has an access token, if not it returns a linkaccountcard, if yes it adds the
    * user to the database. This function calls the getUpdatedResponse.
    *
    * @param request Amazon's LaunchRequest, contains requestID.
-   * @param session Amazon's Session, contains Session ID, accestoken and User ID.
+   * @param session Amazon's Session, contains Session ID, accesstoken and User ID.
    * @return A speechletResponse from getUpdatedResponse
    * @throws SpeechletException A SpeechletException.
    */
@@ -458,19 +458,19 @@ public class chooseCitySpeechlet implements Speechlet {
     card.setTitle("Get your update while it's fresh");
     String name = DB.getUser(UNIQUE_USER_ID).getName();
     String altSpeech = "Hi, " + name + ". ";
-    ArrayList<JourneyModel> reizen = DB.getJourneys(UNIQUE_USER_ID);
-    if (reizen.size() != 0) {
-      PriceAndTimeRequest request = new PriceAndTimeRequest(reizen.get(0).getOriginCode(),
-          reizen.get(0).getDestinationCode(), reizen.get(0).getDeparturedate(),
-          reizen.get(0).getDeparturetime());
-      Connections reis = API.getResponse(request);
-      if (reis.getData().getConnections().get(0).getDuration().getDelay()) {
+    ArrayList<JourneyModel> journeys = DB.getJourneys(UNIQUE_USER_ID);
+    if (journeys.size() != 0) {
+      PriceAndTimeRequest request = new PriceAndTimeRequest(journeys.get(0).getOriginCode(),
+          journeys.get(0).getDestinationCode(), journeys.get(0).getDeparturedate(),
+          journeys.get(0).getDeparturetime());
+      Connections trip = API.getResponse(request);
+      if (trip.getData().getConnections().get(0).getDuration().getDelay()) {
         altSpeech +=
-            "Your trip to " + reis.getData().getConnections().get(0).getDestination().getName()
+            "Your trip to " + trip.getData().getConnections().get(0).getDestination().getName()
                 + " has been delayed";
       } else {
         altSpeech +=
-            "Your trip to " + reis.getData().getConnections().get(0).getDestination().getName()
+            "Your trip to " + trip.getData().getConnections().get(0).getDestination().getName()
                 + " is going according to plan";
       }
     } else {
@@ -502,7 +502,6 @@ public class chooseCitySpeechlet implements Speechlet {
       DB.addLocation(UNIQUE_USER_ID, identifier, city, stations.getStation());
       speech.setText("Location added succesfully, where do you want to travel?");
     } catch (Exception E) {
-      System.out.println("Helaas");
       speech.setText(
           "Location adding failed, you can try again if you want, or tell me where you want to travel");
     }

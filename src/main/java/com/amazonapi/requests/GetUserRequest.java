@@ -4,21 +4,21 @@ import com.RequestInterface;
 
 public class GetUserRequest implements RequestInterface {
 
-  private String accesToken;
+  private String accessToken;
 
-  public GetUserRequest(String accesToken) {
-    this.accesToken = accesToken;
+  public GetUserRequest(String accessToken) {
+    this.accessToken = accessToken;
   }
 
   public String getRequestUrl() {
-    return accesToken;
+    return accessToken;
   }
 
-  public String getAccesToken() {
-    return accesToken;
+  public String getAccessToken() {
+    return accessToken;
   }
 
-  public void setAccesToken(String accesToken) {
-    this.accesToken = accesToken;
+  public void setAccessToken(String accessToken) {
+    this.accessToken = accessToken;
   }
 }

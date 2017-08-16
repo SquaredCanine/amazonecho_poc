@@ -1,4 +1,3 @@
-nl
 com
 com.amazonapi
 com.amazonapi.models
@@ -12,3 +11,4 @@ com.nsiapi.models.calendarprices
 com.nsiapi.models.connections
 com.nsiapi.models.stations
 com.nsiapi.requests
+nl.nsi.demo.echo

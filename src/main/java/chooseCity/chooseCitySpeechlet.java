@@ -625,6 +625,11 @@ public class chooseCitySpeechlet implements Speechlet {
     return SpeechletResponse.newTellResponse(outputSpeech);
   }
 
+  /**
+   * This functions adds a user to the database, it asks the amazon api for name and email using the accestoken.
+   * The user is stored in the database with the Amazon User ID, Amazon name and Amazon email.
+   * @param accestoken
+   */
   private void addUser(String accestoken) {
     AmazonApi aapi = new AmazonApi();
     GetUserRequest request = new GetUserRequest(accestoken);
@@ -632,6 +637,10 @@ public class chooseCitySpeechlet implements Speechlet {
     DB.addUser(UNIQUE_USER_ID, model.getName(), model.getEmail());
   }
 
+  /**
+   * This function is called when the user is new, it asks the user for how many people the user wants to book a ticket.
+   * @return Returns a speechletResponse
+   */
   private SpeechletResponse newUser() {
     PlainTextOutputSpeech speechOutput = new PlainTextOutputSpeech();
     speechOutput.setText(
@@ -644,6 +653,10 @@ public class chooseCitySpeechlet implements Speechlet {
     return SpeechletResponse.newAskResponse(speechOutput, repromptOutput);
   }
 
+  /**
+   * This function is called when no accesstoken is available, it tells the user to link his amazon account with the skill.
+   * @return a speechletResponse
+   */
   private SpeechletResponse linkaccountCard() {
     LinkAccountCard card = new LinkAccountCard();
     PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
@@ -652,7 +665,8 @@ public class chooseCitySpeechlet implements Speechlet {
   }
 
   /**
-   * Zoekt een leuk plaatje bij je gekozen reis, super leuk, super tof, super gaaf.
+   * This function is called when a journey has been selected.
+   * @return returns an image corresponding to the destination.
    */
   private Image createDestinationImage() {
     Image image = new Image();
@@ -692,6 +706,10 @@ public class chooseCitySpeechlet implements Speechlet {
     return image;
   }
 
+  /**
+   * This function is called to initialize the date and time, it selects the current date and time. And stores it in the variables
+   * date and time
+   */
   private void initializeDateandTime() {
     Calendar cal = Calendar.getInstance();
     date =
@@ -703,6 +721,8 @@ public class chooseCitySpeechlet implements Speechlet {
 
   /**
    * Parse the time from HH:mm to HHmm
+   * @param newTime String in the format HH:mm
+   * @return Returns a String in the format HHmm
    */
   private String parseTime(String newTime) {
     if (newTime.equals("EV") || newTime.equals("MO") || newTime.equals("NI") || newTime
@@ -727,11 +747,18 @@ public class chooseCitySpeechlet implements Speechlet {
 
   /**
    * Parses the data from YYYY-MM-DD to YYYYMMDD
+   * @param newDate date String in the format YYYY-MM-DD
+   * @return date String in the format YYYYMMDD
    */
   private String parseDate(String newDate) {
     return newDate.replace("-", "");
   }
 
+  /**
+   * This function is called for a dialog with the user. If information is missing from the intent, then this function will ask
+   * for more information from the user.
+   * @return Returns a speechletResponse
+   */
   private SpeechletResponse delegateDirective() {
     DelegateDirective dd = new DelegateDirective();
 
@@ -765,6 +792,14 @@ public class chooseCitySpeechlet implements Speechlet {
     return SpeechletResponse.newAskResponse(outputSpeech, reprompt, card);
   }
 
+  /**
+   * Wrapper for creating the Ask response. The OutputSpeech and {@link Reprompt} objects are
+   * created from the input strings.
+   *
+   * @param stringOutput the output to be spoken
+   * @param repromptText the reprompt for if the user doesn't reply or is misunderstood.
+   * @return SpeechletResponse the speechlet response
+   */
   private SpeechletResponse newAskResponse(String stringOutput, String repromptText) {
     PlainTextOutputSpeech outputSpeech = new PlainTextOutputSpeech();
     outputSpeech.setText(stringOutput);

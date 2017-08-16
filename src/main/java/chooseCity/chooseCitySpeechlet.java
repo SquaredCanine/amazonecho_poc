@@ -272,10 +272,11 @@ public class chooseCitySpeechlet implements Speechlet {
   }
 
   /**
-   * Deze functie word aangeroepen als de Traveler intent binnen komt. Alle gegevens worden
-   * ingevoerd, en een request word gestuurd Hierna worden 3 mogelijke reis opties teruggegeven aan
-   * de gebruiker, als de reiziger heeft aangegeven dat het om vertrek gaat. Dan worden de
-   * vertrektijden gegeven, maar default is aankomsttijden.
+   * This function is called when the intent equals "Traveler". It asks the NS International API for all the connections corresponding
+   * to the date,time,origin,destination and arrival or departure. And selects a maximum of 3 connections to read back to the user.
+   * If connections could be retrieved the boolean journeyHasBeenSelected is set to true.
+   * @param intent a Traveler intent
+   * @return Returns a speechletResponse
    */
   private SpeechletResponse getTravelerResponse(Intent intent) {
 
@@ -370,9 +371,11 @@ public class chooseCitySpeechlet implements Speechlet {
   }
 
   /**
-   * Deze functie word aangeroepen als de Chooseintent intent binnenkomt, en de boolean
-   * JourneySelected true is. Hier word extra informatie over de reis teruggegeven aan de gebruiker,
-   * en de bijbehorende data opgeslagen in de Database.
+   * This function is called when the intent equals "ChooseIntent" and the boolean journeyHasBeenSelected equals true.
+   * It creates a provisional booking for the selected journey and mails it to the user.
+   * It also gives a quick recap of the selected journey, and sends a card to the interface with a picture.
+   * @param intent a ChooseIntent intent
+   * @return a speechletResponse
    */
   private SpeechletResponse getChooseIntentResponse(Intent intent) {
     String speechText = "";
@@ -428,12 +431,14 @@ public class chooseCitySpeechlet implements Speechlet {
     card.setImage(createDestinationImage());
     card.setText("You are going to: " + selectedJourney.getDestination().getName());
     card.setTitle("NSI wishes you a pleasant journey");
-
+    journeyHasBeenSelected = false;
     return SpeechletResponse.newTellResponse(speech, card);
   }
 
   /**
-   * WIP, deze functie word aangeroepen als de skill word geactiveerd zonder intent.
+   * This function is called when the skill is activated without an intent. It gets the first journey from the database,
+   * and checks if it is delayed.
+   * @return a speechletResponse
    */
   private SpeechletResponse getUpdatedResponse() {
 
@@ -465,9 +470,10 @@ public class chooseCitySpeechlet implements Speechlet {
   }
 
   /**
-   * Deze functie word aangeroepen met de LocationIntent intent. En slaat een locatie op onder de
-   * identifier die de gebruiker aangaf Nu gelimiteerd tot home en work. Station word opgezocht aan
-   * de hand van de opgegeven stad.
+   * This function is called when the intent equals "LocationIntent". It stores the station of the selected city under the identifier of the location in the database.
+   * Identifier must be home or work.
+   * @param intent a LocationIntent
+   * @return Returns a speechletResponse
    */
   private SpeechletResponse getLocationIntentResponse(Intent intent) {
     String identifier = intent.getSlot(LOCATION).getValue();
@@ -493,9 +499,10 @@ public class chooseCitySpeechlet implements Speechlet {
   }
 
   /**
-   * De functie word aangeroepen met de CompositionIntent intent. En slaat de gezinscompositie op.
-   * Dit is een aantal, en zijn altijd adults. In de toekomst kan je hier nog andere age types aan
-   * toevoegen.
+   * This function is called when the intent equals "Composition Intent". It stores the number of people the user wants to book tickets for
+   * in the database.
+   * @param intent a CompositionIntent
+   * @return Returns a speechletResponse
    */
   private SpeechletResponse getCompositionIntentResponse(Intent intent) {
     PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
@@ -515,9 +522,10 @@ public class chooseCitySpeechlet implements Speechlet {
   }
 
   /**
-   * Deze functie word aangeroepen met de Cheapest intent. En zoekt de goedkoopste reisdatum + prijs
-   * op voor de gegeven origin + destination. Je kan de functie aanroepen met alleen een
-   * destination, de functie kiest dan Amsterdam Centraal als origin.
+   * This function is called when the intent equals "Cheapest". If a cheapest journey already has been selected, it will execute bookCheapestOption.
+   * If no cheapest journey has been selected, it will execute getCheapestOptionFromServer
+   * @param intent a Cheapest intent
+   * @return Returns a speechletResponse
    */
   private SpeechletResponse getCheapestOption(Intent intent) {
     if (cheapestRequest == null) {
@@ -528,157 +536,11 @@ public class chooseCitySpeechlet implements Speechlet {
   }
 
   /**
-   * Wrapper for creating the Ask response. The OutputSpeech and {@link Reprompt} objects are
-   * created from the input strings.
-   *
-   * @param stringOutput the output to be spoken
-   * @param repromptText the reprompt for if the user doesn't reply or is misunderstood.
-   * @param card the card to be shown to the user on the alexa web interface
-   * @return SpeechletResponse the speechlet response
+   * This function is called when no cheapest journey has been selected. It returns the cheapest date and price for the journey from the origin to the destination.
+   * If the origin is empty Amsterdam Centraal is selected. After the cheapest date and price is returned, the user can book the journey.
+   * @param intent a Cheapest intent
+   * @return Returns a speechletResponse
    */
-  private SpeechletResponse newAskResponse(String stringOutput, String repromptText,StandardCard card) {
-    PlainTextOutputSpeech outputSpeech = new PlainTextOutputSpeech();
-    outputSpeech.setText(stringOutput);
-
-    PlainTextOutputSpeech repromptOutputSpeech = new PlainTextOutputSpeech();
-    repromptOutputSpeech.setText(repromptText);
-    Reprompt reprompt = new Reprompt();
-    reprompt.setOutputSpeech(repromptOutputSpeech);
-
-    return SpeechletResponse.newAskResponse(outputSpeech, reprompt, card);
-  }
-
-  private SpeechletResponse newAskResponse(String stringOutput, String repromptText) {
-    PlainTextOutputSpeech outputSpeech = new PlainTextOutputSpeech();
-    outputSpeech.setText(stringOutput);
-
-    PlainTextOutputSpeech repromptOutputSpeech = new PlainTextOutputSpeech();
-    repromptOutputSpeech.setText(repromptText);
-    Reprompt reprompt = new Reprompt();
-    reprompt.setOutputSpeech(repromptOutputSpeech);
-
-    return SpeechletResponse.newAskResponse(outputSpeech, reprompt);
-  }
-
-  /**
-   * Zoekt een leuk plaatje bij je gekozen reis, super leuk, super tof, super gaaf.
-   */
-  private Image createDestinationImage() {
-    Image image = new Image();
-    switch (destination) {
-      case "Amsterdam":
-        image.setSmallImageUrl(
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Flag_of_Amsterdam.svg/1200px-Flag_of_Amsterdam.svg.png");
-        image.setLargeImageUrl(
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Flag_of_Amsterdam.svg/1200px-Flag_of_Amsterdam.svg.png");
-        break;
-      case "Berlin":
-        image.setSmallImageUrl(
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Brandenburger_Tor_nachts.jpg/1920px-Brandenburger_Tor_nachts.jpg");
-        image.setLargeImageUrl(
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Brandenburger_Tor_nachts.jpg/1920px-Brandenburger_Tor_nachts.jpg");
-        break;
-      case "Paris":
-        image.setSmallImageUrl(
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Paris_-_Eiffelturm_und_Marsfeld2.jpg/800px-Paris_-_Eiffelturm_und_Marsfeld2.jpg");
-        image.setLargeImageUrl(
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Paris_-_Eiffelturm_und_Marsfeld2.jpg/800px-Paris_-_Eiffelturm_und_Marsfeld2.jpg");
-        break;
-      case "London":
-        image.setSmallImageUrl(
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Londencityhallentheshard.JPG/800px-Londencityhallentheshard.JPG");
-        image.setLargeImageUrl(
-            "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Londencityhallentheshard.JPG/800px-Londencityhallentheshard.JPG");
-        break;
-      default:
-        image.setSmallImageUrl(
-            "https://www.malibuvista.com/wp-content/uploads/2015/04/iStock_000001947025_Full.jpg");
-        image.setLargeImageUrl(
-            "https://www.malibuvista.com/wp-content/uploads/2015/04/iStock_000001947025_Full.jpg");
-        break;
-
-    }
-    return image;
-  }
-
-  /**
-   * Parse the time from HH:mm to HHmm
-   */
-  private String parseTime(String newTime) {
-    if (newTime.equals("EV") || newTime.equals("MO") || newTime.equals("NI") || newTime
-        .equals("AF")) {
-      switch (newTime) {
-        case "NI":
-        case "EV":
-          newTime = "1800";
-          break;
-        case "MO":
-          newTime = "0700";
-          break;
-        case "AF":
-          newTime = "1500";
-          break;
-      }
-    } else {
-      newTime = newTime.replace(":", "");
-    }
-    return newTime;
-  }
-
-  /**
-   * Parses the data from YYYY-MM-DD to YYYYMMDD
-   */
-  private String parseDate(String newDate) {
-    return newDate.replace("-", "");
-  }
-
-  private void addUser(String accestoken) {
-    AmazonApi aapi = new AmazonApi();
-    GetUserRequest request = new GetUserRequest(accestoken);
-    AmazonUser model = aapi.getResponse(request);
-    DB.addUser(UNIQUE_USER_ID, model.getName(), model.getEmail());
-  }
-
-  private void initializeDateandTime() {
-    Calendar cal = Calendar.getInstance();
-    date =
-        "" + cal.get(Calendar.YEAR) + String.format("%02d", (cal.get(Calendar.MONTH) + 1)) + String
-            .format("%02d", cal.get(Calendar.DAY_OF_MONTH));
-    time = "" + String.format("%02d", cal.get(Calendar.HOUR_OF_DAY) + 2) + String
-        .format("%02d", cal.get(Calendar.MINUTE));
-  }
-
-  private SpeechletResponse newUser() {
-    PlainTextOutputSpeech speechOutput = new PlainTextOutputSpeech();
-    speechOutput.setText(
-        "Thank you for enabling this skill, since this is your first time, with how many people do you travel?");
-    Reprompt repromptOutput = new Reprompt();
-    PlainTextOutputSpeech repromptSpeech = new PlainTextOutputSpeech();
-    repromptSpeech.setText("If you want to exit, just say exit");
-    repromptOutput.setOutputSpeech(repromptSpeech);
-    isNewUser = false;
-    return SpeechletResponse.newAskResponse(speechOutput, repromptOutput);
-  }
-
-  private SpeechletResponse linkaccountCard() {
-    LinkAccountCard card = new LinkAccountCard();
-    PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
-    speech.setText("Go to your alexa app to link this skill");
-    return SpeechletResponse.newTellResponse(speech, card);
-  }
-
-  private SpeechletResponse delegateDirective() {
-    DelegateDirective dd = new DelegateDirective();
-
-    ArrayList<Directive> directiveList = new ArrayList<>();
-    directiveList.add(dd);
-
-    SpeechletResponse speechletResp = new SpeechletResponse();
-    speechletResp.setDirectives(directiveList);
-    speechletResp.setNullableShouldEndSession(false);
-    return speechletResp;
-  }
-
   @SuppressWarnings("UnusedAssignment")
   private SpeechletResponse getCheapestOptionFromServer(Intent intent) {
     Slot cityDestination = intent.getSlot(CITY_DESTINATION);
@@ -733,6 +595,10 @@ public class chooseCitySpeechlet implements Speechlet {
     return SpeechletResponse.newAskResponse(outputSpeech, reprompt);
   }
 
+  /**
+   * This function is called when the cheapest journey has been selected. It creates a provisional booking and sends an email to the user.
+   * @return a speechletResponse
+   */
   private SpeechletResponse bookCheapestOption() {
 
     Connections data = API.getResponse(cheapestRequest);
@@ -757,5 +623,157 @@ public class chooseCitySpeechlet implements Speechlet {
     outputSpeech.setText(speechText);
     cheapestRequest = null;
     return SpeechletResponse.newTellResponse(outputSpeech);
+  }
+
+  private void addUser(String accestoken) {
+    AmazonApi aapi = new AmazonApi();
+    GetUserRequest request = new GetUserRequest(accestoken);
+    AmazonUser model = aapi.getResponse(request);
+    DB.addUser(UNIQUE_USER_ID, model.getName(), model.getEmail());
+  }
+
+  private SpeechletResponse newUser() {
+    PlainTextOutputSpeech speechOutput = new PlainTextOutputSpeech();
+    speechOutput.setText(
+        "Thank you for enabling this skill, since this is your first time, with how many people do you travel?");
+    Reprompt repromptOutput = new Reprompt();
+    PlainTextOutputSpeech repromptSpeech = new PlainTextOutputSpeech();
+    repromptSpeech.setText("If you want to exit, just say exit");
+    repromptOutput.setOutputSpeech(repromptSpeech);
+    isNewUser = false;
+    return SpeechletResponse.newAskResponse(speechOutput, repromptOutput);
+  }
+
+  private SpeechletResponse linkaccountCard() {
+    LinkAccountCard card = new LinkAccountCard();
+    PlainTextOutputSpeech speech = new PlainTextOutputSpeech();
+    speech.setText("Go to your alexa app to link this skill");
+    return SpeechletResponse.newTellResponse(speech, card);
+  }
+
+  /**
+   * Zoekt een leuk plaatje bij je gekozen reis, super leuk, super tof, super gaaf.
+   */
+  private Image createDestinationImage() {
+    Image image = new Image();
+    switch (destination) {
+      case "Amsterdam":
+        image.setSmallImageUrl(
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Flag_of_Amsterdam.svg/1200px-Flag_of_Amsterdam.svg.png");
+        image.setLargeImageUrl(
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Flag_of_Amsterdam.svg/1200px-Flag_of_Amsterdam.svg.png");
+        break;
+      case "Berlin":
+        image.setSmallImageUrl(
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Brandenburger_Tor_nachts.jpg/1920px-Brandenburger_Tor_nachts.jpg");
+        image.setLargeImageUrl(
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Brandenburger_Tor_nachts.jpg/1920px-Brandenburger_Tor_nachts.jpg");
+        break;
+      case "Paris":
+        image.setSmallImageUrl(
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Paris_-_Eiffelturm_und_Marsfeld2.jpg/800px-Paris_-_Eiffelturm_und_Marsfeld2.jpg");
+        image.setLargeImageUrl(
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Paris_-_Eiffelturm_und_Marsfeld2.jpg/800px-Paris_-_Eiffelturm_und_Marsfeld2.jpg");
+        break;
+      case "London":
+        image.setSmallImageUrl(
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Londencityhallentheshard.JPG/800px-Londencityhallentheshard.JPG");
+        image.setLargeImageUrl(
+            "https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Londencityhallentheshard.JPG/800px-Londencityhallentheshard.JPG");
+        break;
+      default:
+        image.setSmallImageUrl(
+            "https://www.malibuvista.com/wp-content/uploads/2015/04/iStock_000001947025_Full.jpg");
+        image.setLargeImageUrl(
+            "https://www.malibuvista.com/wp-content/uploads/2015/04/iStock_000001947025_Full.jpg");
+        break;
+
+    }
+    return image;
+  }
+
+  private void initializeDateandTime() {
+    Calendar cal = Calendar.getInstance();
+    date =
+        "" + cal.get(Calendar.YEAR) + String.format("%02d", (cal.get(Calendar.MONTH) + 1)) + String
+            .format("%02d", cal.get(Calendar.DAY_OF_MONTH));
+    time = "" + String.format("%02d", cal.get(Calendar.HOUR_OF_DAY) + 2) + String
+        .format("%02d", cal.get(Calendar.MINUTE));
+  }
+
+  /**
+   * Parse the time from HH:mm to HHmm
+   */
+  private String parseTime(String newTime) {
+    if (newTime.equals("EV") || newTime.equals("MO") || newTime.equals("NI") || newTime
+        .equals("AF")) {
+      switch (newTime) {
+        case "NI":
+        case "EV":
+          newTime = "1800";
+          break;
+        case "MO":
+          newTime = "0700";
+          break;
+        case "AF":
+          newTime = "1500";
+          break;
+      }
+    } else {
+      newTime = newTime.replace(":", "");
+    }
+    return newTime;
+  }
+
+  /**
+   * Parses the data from YYYY-MM-DD to YYYYMMDD
+   */
+  private String parseDate(String newDate) {
+    return newDate.replace("-", "");
+  }
+
+  private SpeechletResponse delegateDirective() {
+    DelegateDirective dd = new DelegateDirective();
+
+    ArrayList<Directive> directiveList = new ArrayList<>();
+    directiveList.add(dd);
+
+    SpeechletResponse speechletResp = new SpeechletResponse();
+    speechletResp.setDirectives(directiveList);
+    speechletResp.setNullableShouldEndSession(false);
+    return speechletResp;
+  }
+
+  /**
+   * Wrapper for creating the Ask response. The OutputSpeech and {@link Reprompt} objects are
+   * created from the input strings.
+   *
+   * @param stringOutput the output to be spoken
+   * @param repromptText the reprompt for if the user doesn't reply or is misunderstood.
+   * @param card the card to be shown to the user on the alexa web interface
+   * @return SpeechletResponse the speechlet response
+   */
+  private SpeechletResponse newAskResponse(String stringOutput, String repromptText,StandardCard card) {
+    PlainTextOutputSpeech outputSpeech = new PlainTextOutputSpeech();
+    outputSpeech.setText(stringOutput);
+
+    PlainTextOutputSpeech repromptOutputSpeech = new PlainTextOutputSpeech();
+    repromptOutputSpeech.setText(repromptText);
+    Reprompt reprompt = new Reprompt();
+    reprompt.setOutputSpeech(repromptOutputSpeech);
+
+    return SpeechletResponse.newAskResponse(outputSpeech, reprompt, card);
+  }
+
+  private SpeechletResponse newAskResponse(String stringOutput, String repromptText) {
+    PlainTextOutputSpeech outputSpeech = new PlainTextOutputSpeech();
+    outputSpeech.setText(stringOutput);
+
+    PlainTextOutputSpeech repromptOutputSpeech = new PlainTextOutputSpeech();
+    repromptOutputSpeech.setText(repromptText);
+    Reprompt reprompt = new Reprompt();
+    reprompt.setOutputSpeech(repromptOutputSpeech);
+
+    return SpeechletResponse.newAskResponse(outputSpeech, reprompt);
   }
 }

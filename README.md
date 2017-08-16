@@ -37,7 +37,7 @@ public final class chooseCitySpeechletRequestStreamHandler extends SpeechletRequ
 }
 ```
 
-You can find the database model and create statement in sql/.
+You can find the database model and create statement in sql/.<br>
 You also have to create a few environment variables like or replace the following:
 ```java
 System.getenv("username_DB"); //Username for the database

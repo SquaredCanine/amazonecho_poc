@@ -30,7 +30,9 @@
       "samples": [
         "the cheapest option to {toCity}",
         "the cheapest option from {fromCity} to {toCity}",
-        "book the cheapest option"
+        "book the cheapest option",
+        "what is the cheapest option to {toCity}",
+        "get me the cheapest option to {toCity}"
       ],
       "slots": [
         {
@@ -71,7 +73,10 @@
         "i always travel with {numberOfPassengers} people",
         "i always travel {numberOfPassengers}",
         "i travel with {numberOfPassengers} people",
-        "i want to change my composition"
+        "i want to change my composition",
+        "change my composition",
+        "composition change",
+        "a composition change"
       ],
       "slots": [
         {
@@ -93,7 +98,10 @@
         "I want to update a location",
         "I want to add a location",
         "i want to add",
-        "i want to add {locationidentifier} in {cityname}"
+        "i want to add {locationidentifier} in {cityname}",
+        "i want to add {locationidentifier}",
+        "add a location",
+        "location"
       ],
       "slots": [
         {
@@ -116,18 +124,36 @@
     {
       "name": "Traveler",
       "samples": [
-        "purchase a ticket",
-        "buy a ticket",
-        "i want to buy a ticket",
+        "order a ticket",
+        "i want to order a ticket",
         "i want to purchase a ticket",
         "if i can travel",
-        "buy a ticket to {toCity} from {fromCity}",
-        "buy a ticket for {date} and {juncture} on {time}",
-        "buy a ticket for {date}",
-        "buy a ticket to {juncture} on {time}",
-        "buy a ticket to {toCity}",
+        "order a ticket to {toCity} from {fromCity}",
+        "order a ticket for {date} and {juncture} on {time}",
+        "order a ticket for {date}",
+        "order a ticket to {juncture} on {time}",
+        "order a ticket to {toCity}",
         "if i can {juncture} at {time}",
-        "buy a ticket from {fromCity} to {toCity}"
+        "order a ticket from {fromCity} to {toCity}",
+        "order a ticket for {date} and {juncture} at {time}",
+        "a ticket to {toCity}",
+        "get a ticket",
+        "obtain a ticket",
+        "to order a ticket",
+        "order a ticket to {toCity} from {fromCity} on {date}  and {juncture} at {time}",
+        "order a ticket to {toCity} from {fromCity} on {date} at {time}",
+        "order a ticket from {fromCity} to {toCity}  on {date} at {time}",
+        "order a ticket from {fromCity} to {toCity} on {date}  and {juncture} at {time}",
+        "ordering a ticket",
+        "getting a ticket",
+        "a ticket",
+        "i want to buy a ticket",
+        "tickets",
+        "get tickets",
+        "order tickets",
+        "tickets to {toCity}",
+        "get me a ticket",
+        "ticket"
       ],
       "slots": [
         {
@@ -200,14 +226,18 @@
           "id": null,
           "name": {
             "value": "arrive",
-            "synonyms": []
+            "synonyms": [
+              "arrival"
+            ]
           }
         },
         {
           "id": null,
           "name": {
             "value": "depart",
-            "synonyms": []
+            "synonyms": [
+              "departure"
+            ]
           }
         }
       ]

@@ -282,7 +282,6 @@ public class NSInternationalSpeechlet implements Speechlet {
       throws SpeechletException {
     log.info("onSessionEnded requestId={}, sessionId={}", request.getRequestId(),
         session.getSessionId());
-    // any cleanup logic goes here
   }
 
   /**

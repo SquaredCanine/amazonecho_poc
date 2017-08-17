@@ -319,7 +319,7 @@ public class NSInternationalSpeechlet implements Speechlet {
       speechText.append("On ").append(slotDate.getValue()).append(". ");
     }
     if (juncture != null && juncture.getValue() != null) {
-      if (juncture.getValue().equals("arrival")) {
+      if (juncture.getValue().equals("arrive")) {
         arrival = true;
       }
     }

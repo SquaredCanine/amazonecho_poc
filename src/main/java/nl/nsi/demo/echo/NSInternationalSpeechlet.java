@@ -153,6 +153,13 @@ public class NSInternationalSpeechlet implements Speechlet {
   private String time = "";
 
   /**
+   * This int is used to select a class
+   * 0 = first class
+   * 1 = second class
+   */
+  private int selectedClass = 0;
+
+  /**
    * This function is the first to be called when the skill is activated, in here the date and time
    * are set for use in the requests. The Amazon user ID is collected and stored. And the database
    * is called to see if this is a new user, if the user is new isNewUser is set to true.
@@ -349,19 +356,19 @@ public class NSInternationalSpeechlet implements Speechlet {
         return SpeechletResponse.newTellResponse(altSpeech);
       } else {
         speechText.append("There are ").append(connectionOptions.size())
-            .append(" options available. ");
+            .append(" options available. \n ");
       }
       if (arrival) {
         for (Connection element : connectionOptions) {
           speechText.append("The ").append(ORDINAL_NUMBER_LIST[i]).append(" option is arrival at ")
-              .append(element.getArrivalTime()).append(". ");
+              .append(element.getArrivalTime()).append(".\n ");
           i++;
         }
       } else {
         for (Connection element : connectionOptions) {
           speechText.append("The ").append(ORDINAL_NUMBER_LIST[i])
               .append(" option is departure at ").append(element
-              .getDepartureTime()).append(". ");
+              .getDepartureTime()).append(".\n ");
           i++;
         }
       }
@@ -371,7 +378,7 @@ public class NSInternationalSpeechlet implements Speechlet {
           "Something went wrong with collection data of your journey, please try again later");
     }
     StandardCard card = new StandardCard();
-    card.setTitle("nl");
+    card.setTitle("Travel options");
     card.setText(speechText.toString());
 
     String repromptText = "If you want to cancel the order, just say exit.";
@@ -418,11 +425,11 @@ public class NSInternationalSpeechlet implements Speechlet {
         selectedJourney.getDestination().getCode(),
         selectedJourney.getDBDepartureTime(),
         selectedJourney.getDBDepartureDate(),
-        selectedJourney.getOffers().get(0).getSalesPrice().getAmount());
+        selectedJourney.getOffers().get(selectedClass).getSalesPrice().getAmount());
     ProvisionalBookingRequest request = new ProvisionalBookingRequest(
         NSInternationalSpeechlet.UNIQUE_NS_ID,
         selectedJourney.getId(),
-        selectedJourney.getOffers().get(0).getId(),
+        selectedJourney.getOffers().get(selectedClass).getId(),
         "true",
         selectedJourney.getOrigin().getCode(),
         selectedJourney.getDestination().getCode());

@@ -6,11 +6,9 @@ import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import com.nsiapi.models.connections.Connection;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 
 /**
  * This class is used to send an email to the users
@@ -20,6 +18,7 @@ public class MailClient {
   private final String gotoUrl;
   private final String sender = System.getenv("username_email");
   private final String password = System.getenv("password_email");
+  private final String mailserver = System.getenv("mailserver");
   private final Connection journey;
   private final String userEmail;
 
@@ -41,11 +40,13 @@ public class MailClient {
    */
   public void sendMail() {
    Properties props = new Properties();
-   props.put("mail.smtp.host", "smtp.gmail.com");
+   props.put("mail.smtp.host", mailserver);
    props.put("mail.smtp.socketFactory.port", "465");
    props.put("mail.smtp.socketFactory.class","javax.net.ssl.SSLSocketFactory");
    props.put("mail.smtp.auth","true");
    props.put("mail.smtp.port","465");
+   props.put("mail.smtp.starttls.enable","true");
+   props.put("mail.smtp.ssl.trust",mailserver);
    Session session = Session.getDefaultInstance(props,new javax.mail.Authenticator(){
      @Override
      protected PasswordAuthentication getPasswordAuthentication() {
@@ -54,7 +55,7 @@ public class MailClient {
    });
     try {
       Message email = new MimeMessage(session);
-      email.setFrom(new InternetAddress("internationalereizen@gmail.com"));
+      email.setFrom(new InternetAddress(sender));
       email.setSubject("Voltooi jouw boeking!");
       email.setContent("<a href =\"https://www.nsinternational.nl/\">" +
           "<img src=\"http://www.natm.nl/web/wp-content/uploads/2015/04/logo_nsinternational.jpg\" alt=\"NsInternational\" title=\"NsInternational\" style=\"display:block\" height=\"100px\" width=\"272px\">"

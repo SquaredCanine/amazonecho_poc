@@ -1,10 +1,16 @@
 package com;
 
+import java.util.Properties;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import com.nsiapi.models.connections.Connection;
-import org.apache.commons.mail.DefaultAuthenticator;
-import org.apache.commons.mail.Email;
-import org.apache.commons.mail.EmailException;
-import org.apache.commons.mail.SimpleEmail;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 
 /**
  * This class is used to send an email to the users
@@ -34,13 +40,21 @@ public class MailClient {
    * The email is send to the email of the user.
    */
   public void sendMail() {
-    Email email = new SimpleEmail();
-    email.setHostName("smtp.googlemail.com");
-    email.setSmtpPort(465);
-    email.setAuthenticator(new DefaultAuthenticator(sender, password));
-    email.setSSLOnConnect(true);
+   Properties props = new Properties();
+   props.put("mail.smtp.host", "smtp.gmail.com");
+   props.put("mail.smtp.socketFactory.port", "465");
+   props.put("mail.smtp.socketFactory.class","javax.net.ssl.SSLSocketFactory");
+   props.put("mail.smtp.auth","true");
+   props.put("mail.smtp.port","465");
+   Session session = Session.getDefaultInstance(props,new javax.mail.Authenticator(){
+     @Override
+     protected PasswordAuthentication getPasswordAuthentication() {
+       return new PasswordAuthentication(sender,password);
+     }
+   });
     try {
-      email.setFrom("internationalereizen@gmail.com");
+      Message email = new MimeMessage(session);
+      email.setFrom(new InternetAddress("internationalereizen@gmail.com"));
       email.setSubject("Voltooi jouw boeking!");
       email.setContent("<a href =\"https://www.nsinternational.nl/\">" +
           "<img src=\"http://www.natm.nl/web/wp-content/uploads/2015/04/logo_nsinternational.jpg\" alt=\"NsInternational\" title=\"NsInternational\" style=\"display:block\" height=\"100px\" width=\"272px\">"
@@ -63,11 +77,11 @@ public class MailClient {
           "<b>Totale prijs: " + journey.getOffers().get(0).getSalesPrice().getAmount() + " </b>" +
           "<br><br>" +
           "Met vriendelijke groet,<br><br> Quinten \"Eindbaas\" Stekelenburg<br>", "text/html");
-      email.addTo(userEmail);
-      email.send();
+      email.setRecipient(Message.RecipientType.TO,new InternetAddress(userEmail));
+      Transport.send(email);
 
-    } catch (EmailException EE) {
-      System.out.println("Problem with emailclient: " + EE.getMessage());
+    } catch (MessagingException e) {
+      System.out.println("Problem with emailclient: " + e.getMessage());
     }
   }
 }

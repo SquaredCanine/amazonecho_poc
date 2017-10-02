@@ -83,7 +83,7 @@ public class PriceAndTimeRequest implements RequestInterface {
       timetype = "&timetype=departure";
     }
   }
-
+ 
   /**
    * Converts a city name(or location like home or work) to a stationcode.
    * @param original String containing the city name

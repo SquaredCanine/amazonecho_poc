@@ -560,12 +560,12 @@ public class NSInternationalSpeechlet implements Speechlet {
       CalendarDateRequest request = new CalendarDateRequest(cheapDestinationCode, cheapOriginCode);
       Dates data = API.getResponse(request);
       if (data.getData().getPricesAvailable()) {
-        CalendarPriceRequest request1 = new CalendarPriceRequest(cheapDestinationCode,
-            cheapOriginCode);
+        CalendarPriceRequest request1 = new CalendarPriceRequest(cheapDestinationCode, cheapOriginCode);
         Prices prices = API.getResponse(request1);
         for (Price element : prices.getData().getPrices()) {
-          if (cheapestPrice > Double.parseDouble(element.getAmount())) {
-            cheapestPrice = Double.parseDouble(element.getAmount());
+          double elementprice = Double.parseDouble(element.getAmount());
+          if (cheapestPrice > elementprice) {
+            cheapestPrice = elementprice;
             cheapestDate = element.getDate();
             for (Period_ period : element.getDeparture().getPeriods()) {
               if (element.getAmount().equals(period.getAmount())) {
@@ -718,7 +718,7 @@ public class NSInternationalSpeechlet implements Speechlet {
   }
 
   /**
-   * Parse the time from HH:mm to HHmm
+   * Parse the time from HH:mm to HHmm or an abbreviation to HHmm
    *
    * @param newTime String in the format HH:mm
    * @return Returns a String in the format HHmm

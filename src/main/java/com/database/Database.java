@@ -4,12 +4,12 @@ import com.database.models.CompositionModel;
 import com.database.models.JourneyModel;
 import com.database.models.LocationsModel;
 import com.database.models.UsersModel;
-import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import nl.nsi.demo.echo.NSInternationalSpeechlet;
 
 /**
  * This class is used for all the database modifications like adding,updating and removing
@@ -17,7 +17,7 @@ import java.util.ArrayList;
  */
 public class Database {
 
-  private Connection con = null;
+  private java.sql.Connection con = null;
   private final String host = System.getenv("location_DB");
   private final String uName = System.getenv("username_DB");
   private final String uPass = System.getenv("password_DB");
@@ -216,8 +216,14 @@ public class Database {
     }
   }
 
-  public void addJourney(String aUID, String identifier, String originCode, String destinationCode,
-      String departuretime, String departuredate, String orderprice) {
+  public void addJourney(int numericalidentifier, com.nsiapi.models.connections.Connection selectedJourney, int selectedClass) {
+        String aUID = NSInternationalSpeechlet.UNIQUE_USER_ID;
+        String identifier = Integer.toString(numericalidentifier);
+        String originCode = selectedJourney.getOrigin().getCode();
+        String destinationCode = selectedJourney.getDestination().getCode();
+        String departuretime = selectedJourney.getDBDepartureTime();
+        String departuredate = selectedJourney.getDBDepartureDate();
+        String orderprice = selectedJourney.getOffers().get(selectedClass).getSalesPrice().getAmount();
     try {
       PreparedStatement ps = con.prepareStatement(
           "INSERT INTO `mydb`.`Journey` (`UID`, `identifier`, `originCode`, `destinationCode`, `departuretime`, `departuredate`, `orderprice`) VALUES (?, ?, ?, ?, ?, ?, ?)");

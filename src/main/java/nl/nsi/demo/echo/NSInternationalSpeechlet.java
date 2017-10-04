@@ -199,10 +199,8 @@ public class NSInternationalSpeechlet implements Speechlet {
         session.getSessionId());
     if (session.getUser().getAccessToken() == null) {
       return linkaccountCard();
-    } else {
-      if (isNewUser) {
+    } else if (isNewUser) {
         addUser(session.getUser().getAccessToken());
-      }
     }
     return getUpdatedResponse();
   }
@@ -230,42 +228,29 @@ public class NSInternationalSpeechlet implements Speechlet {
       addUser(session.getUser().getAccessToken());
       return newUser();
     }
-
-    if ("Traveler".equals(intentName)) {
-      if (request.getDialogState() == STARTED || request.getDialogState() == IN_PROGRESS) {
-        return delegateDirective();
-      } else {
+    if (request.getDialogState() == STARTED || request.getDialogState() == IN_PROGRESS) {
+      return delegateDirective();
+    }
+    switch(intentName){
+      case "Traveler":
         return getTravelerResponse(intent);
-      }
-    } else if ("Cheapest".equals(intentName)) {
-      return getCheapestOption(intent);
-    } else if ("LocationIntent".equals(intentName)) {
-      if (request.getDialogState() == STARTED || request.getDialogState() == IN_PROGRESS) {
-        return delegateDirective();
-      } else {
+      case "Cheapest":
+        return getCheapestOption(intent);
+      case "LocationIntent":
         return getLocationIntentResponse(intent);
-      }
-    } else if ("CompositionIntent".equals(intentName)) {
-      if (request.getDialogState() == STARTED || request.getDialogState() == IN_PROGRESS) {
-        return delegateDirective();
-      } else {
+      case "CompositionIntent":
         return getCompositionIntentResponse(intent);
-      }
-    } else if ("ChooseIntent".equals(intentName) && journeyHasBeenSelected) {
-      return getChooseIntentResponse(intent);
-
-    } else if ("AMAZON.StopIntent".equals(intentName)) {
-      PlainTextOutputSpeech outputSpeech = new PlainTextOutputSpeech();
-      outputSpeech.setText("Goodbye");
-
-      return SpeechletResponse.newTellResponse(outputSpeech);
-    } else if ("AMAZON.CancelIntent".equals(intentName)) {
-      PlainTextOutputSpeech outputSpeech = new PlainTextOutputSpeech();
-      outputSpeech.setText("Goodbye");
-
-      return SpeechletResponse.newTellResponse(outputSpeech);
-    } else {
-      throw new SpeechletException("Invalid Intent");
+      case "AMAZON.CancelIntent":
+      case "AMAZON.StopIntent":
+        PlainTextOutputSpeech outputSpeech = new PlainTextOutputSpeech();
+        outputSpeech.setText("Goodbye");
+        return SpeechletResponse.newTellResponse(outputSpeech);
+      case "ChooseIntent":
+        if(journeyHasBeenSelected){
+          return getChooseIntentResponse(intent);
+        }
+       default:
+         throw new SpeechletException("Invalid Intent");
     }
   }
 
@@ -328,9 +313,7 @@ public class NSInternationalSpeechlet implements Speechlet {
 
     PriceAndTimeRequest request = new PriceAndTimeRequest(origin, destination, date, time, arrival);
     if (request.getDestinationCode().equals(request.getOriginCode())) {
-      PlainTextOutputSpeech altSpeech = new PlainTextOutputSpeech();
-      altSpeech.setText("Your selected origin or destination is wrong, please try again.");
-      return SpeechletResponse.newTellResponse(altSpeech);
+      return alternativeSpeech("Your selected origin or destination is wrong, please try again.");
     }
     Connections model = API.getResponse(request);
 
@@ -350,9 +333,7 @@ public class NSInternationalSpeechlet implements Speechlet {
       }
       i = 0;
       if (connectionOptions.isEmpty()) {
-        PlainTextOutputSpeech altSpeech = new PlainTextOutputSpeech();
-        altSpeech.setText("There are no trains available, try a different date");
-        return SpeechletResponse.newTellResponse(altSpeech);
+       return alternativeSpeech("There are no trains available, try a different date");
       } else {
         speechText.append("There are ").append(connectionOptions.size())
             .append(" options available. \n ");
@@ -374,7 +355,7 @@ public class NSInternationalSpeechlet implements Speechlet {
       speechText.append("Which option do you choose?");
     } else {
       speechText = new StringBuilder(
-          "Something went wrong with collection data of your journey, please try again later");
+          "Something went wrong with collecting the data of your journey, please try again later");
     }
     StandardCard card = new StandardCard();
     card.setTitle("Travel options");
@@ -405,10 +386,8 @@ public class NSInternationalSpeechlet implements Speechlet {
       try {
         selectedJourneyInteger = Integer.parseInt(option.getValue()) - 1;
       } catch (NumberFormatException NFE) {
-
         return newAskResponse("I didn't quite get that, which option did you choose?",
             "To cancel the order, just say exit");
-
       }
       speechText = "You have chosen option " + (selectedJourneyInteger + 1) + " . ";
     }
@@ -419,19 +398,10 @@ public class NSInternationalSpeechlet implements Speechlet {
     }
     connectionOptions = null;
     speechText += selectedJourney.getJourneySummary();
-    DB.addJourney(UNIQUE_USER_ID, Integer.toString(journeyidentifier),
-        selectedJourney.getOrigin().getCode(),
-        selectedJourney.getDestination().getCode(),
-        selectedJourney.getDBDepartureTime(),
-        selectedJourney.getDBDepartureDate(),
-        selectedJourney.getOffers().get(selectedClass).getSalesPrice().getAmount());
-    ProvisionalBookingRequest request = new ProvisionalBookingRequest(
-        NSInternationalSpeechlet.UNIQUE_NS_ID,
-        selectedJourney.getId(),
-        selectedJourney.getOffers().get(selectedClass).getId(),
-        "true",
-        selectedJourney.getOrigin().getCode(),
-        selectedJourney.getDestination().getCode());
+
+    DB.addJourney(journeyidentifier,selectedJourney,selectedClass);
+
+    ProvisionalBookingRequest request = new ProvisionalBookingRequest(selectedJourney,selectedClass);
     Dnr model = NSInternationalSpeechlet.API.getResponse(request);
 
     String gotoUrl = ("https://www.nsinternational.nl/en/traintickets#/passengers/" + model
@@ -590,12 +560,12 @@ public class NSInternationalSpeechlet implements Speechlet {
       CalendarDateRequest request = new CalendarDateRequest(cheapDestinationCode, cheapOriginCode);
       Dates data = API.getResponse(request);
       if (data.getData().getPricesAvailable()) {
-        CalendarPriceRequest request1 = new CalendarPriceRequest(cheapDestinationCode,
-            cheapOriginCode);
+        CalendarPriceRequest request1 = new CalendarPriceRequest(cheapDestinationCode, cheapOriginCode);
         Prices prices = API.getResponse(request1);
         for (Price element : prices.getData().getPrices()) {
-          if (cheapestPrice > Double.parseDouble(element.getAmount())) {
-            cheapestPrice = Double.parseDouble(element.getAmount());
+          double elementprice = Double.parseDouble(element.getAmount());
+          if (cheapestPrice > elementprice) {
+            cheapestPrice = elementprice;
             cheapestDate = element.getDate();
             for (Period_ period : element.getDeparture().getPeriods()) {
               if (element.getAmount().equals(period.getAmount())) {
@@ -631,13 +601,7 @@ public class NSInternationalSpeechlet implements Speechlet {
     Connections data = API.getResponse(cheapestRequest);
     UNIQUE_NS_ID = data.getData().getUid();
     Connection selectedJourney = data.getData().getConnections().get(0);
-    ProvisionalBookingRequest request = new ProvisionalBookingRequest(
-        NSInternationalSpeechlet.UNIQUE_NS_ID,
-        selectedJourney.getId(),
-        selectedJourney.getOffers().get(1).getId(),
-        "true",
-        selectedJourney.getOrigin().getCode(),
-        selectedJourney.getDestination().getCode());
+    ProvisionalBookingRequest request = new ProvisionalBookingRequest(selectedJourney,selectedClass);
     Dnr model = NSInternationalSpeechlet.API.getResponse(request);
 
     String gotoUrl = ("https://www.nsinternational.nl/en/traintickets#/passengers/" + model
@@ -754,7 +718,7 @@ public class NSInternationalSpeechlet implements Speechlet {
   }
 
   /**
-   * Parse the time from HH:mm to HHmm
+   * Parse the time from HH:mm to HHmm or an abbreviation to HHmm
    *
    * @param newTime String in the format HH:mm
    * @return Returns a String in the format HHmm
@@ -848,5 +812,11 @@ public class NSInternationalSpeechlet implements Speechlet {
     reprompt.setOutputSpeech(repromptOutputSpeech);
 
     return SpeechletResponse.newAskResponse(outputSpeech, reprompt);
+  }
+
+  private SpeechletResponse alternativeSpeech(String speech){
+    PlainTextOutputSpeech outputSpeech = new PlainTextOutputSpeech();
+    outputSpeech.setText(speech);
+    return SpeechletResponse.newTellResponse(outputSpeech);
   }
 }

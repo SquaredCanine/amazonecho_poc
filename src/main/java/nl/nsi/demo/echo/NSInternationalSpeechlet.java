@@ -315,9 +315,7 @@ public class NSInternationalSpeechlet implements Speechlet {
 
     PriceAndTimeRequest request = new PriceAndTimeRequest(origin, destination, date, time, arrival);
     if (request.getDestinationCode().equals(request.getOriginCode())) {
-      PlainTextOutputSpeech altSpeech = new PlainTextOutputSpeech();
-      altSpeech.setText("Your selected origin or destination is wrong, please try again.");
-      return SpeechletResponse.newTellResponse(altSpeech);
+      return alternativeSpeech("Your selected origin or destination is wrong, please try again.");
     }
     Connections model = API.getResponse(request);
 
@@ -337,9 +335,7 @@ public class NSInternationalSpeechlet implements Speechlet {
       }
       i = 0;
       if (connectionOptions.isEmpty()) {
-        PlainTextOutputSpeech altSpeech = new PlainTextOutputSpeech();
-        altSpeech.setText("There are no trains available, try a different date");
-        return SpeechletResponse.newTellResponse(altSpeech);
+       return alternativeSpeech("There are no trains available, try a different date");
       } else {
         speechText.append("There are ").append(connectionOptions.size())
             .append(" options available. \n ");
@@ -818,5 +814,11 @@ public class NSInternationalSpeechlet implements Speechlet {
     reprompt.setOutputSpeech(repromptOutputSpeech);
 
     return SpeechletResponse.newAskResponse(outputSpeech, reprompt);
+  }
+
+  private SpeechletResponse alternativeSpeech(String speech){
+    PlainTextOutputSpeech outputSpeech = new PlainTextOutputSpeech();
+    outputSpeech.setText(speech);
+    return SpeechletResponse.newTellResponse(outputSpeech);
   }
 }

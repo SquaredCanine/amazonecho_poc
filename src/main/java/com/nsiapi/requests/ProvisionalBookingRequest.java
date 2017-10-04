@@ -1,5 +1,6 @@
 package com.nsiapi.requests;
 
+import com.nsiapi.models.connections.Connection;
 import nl.nsi.demo.echo.NSInternationalSpeechlet;
 import com.RequestInterface;
 import com.database.models.CompositionModel;
@@ -22,21 +23,16 @@ public class ProvisionalBookingRequest implements RequestInterface {
 
   /**
    * Sets the requests and body
-   * @param userID String containing the user ID of NS
-   * @param connectionID String containing the selected Connection
-   * @param offerID String containing the selected Offer
-   * @param seatreservation String containing true or false, default is true.
-   * @param originCode String containing the station code of the origin
-   * @param destinationCode String containing the station code of the destination
+   * @param selectedJourney Journey class with the selected journey
+   * @param selectedClass An integer representing the chosen train class. Can be 1 or 2
    */
-  public ProvisionalBookingRequest(String userID, String connectionID, String offerID,
-      String seatreservation, String originCode, String destinationCode) {
-    this.userID = userID;
-    this.connectionID = connectionID;
-    this.offerID = offerID;
-    this.seatreservation = seatreservation;
-    this.originCode = originCode;
-    this.destinationCode = destinationCode;
+  public ProvisionalBookingRequest(Connection selectedJourney, int selectedClass) {
+    this.userID = NSInternationalSpeechlet.UNIQUE_NS_ID;
+    this.connectionID = selectedJourney.getId();
+    this.offerID = selectedJourney.getOffers().get(selectedClass).getId();
+    this.seatreservation = "true";
+    this.originCode = selectedJourney.getOrigin().getCode();
+    this.destinationCode = selectedJourney.getDestination().getCode();
     setPassengers();
   }
 

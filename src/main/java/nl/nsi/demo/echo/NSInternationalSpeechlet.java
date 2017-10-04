@@ -419,19 +419,9 @@ public class NSInternationalSpeechlet implements Speechlet {
     }
     connectionOptions = null;
     speechText += selectedJourney.getJourneySummary();
-    DB.addJourney(UNIQUE_USER_ID, Integer.toString(journeyidentifier),
-        selectedJourney.getOrigin().getCode(),
-        selectedJourney.getDestination().getCode(),
-        selectedJourney.getDBDepartureTime(),
-        selectedJourney.getDBDepartureDate(),
-        selectedJourney.getOffers().get(selectedClass).getSalesPrice().getAmount());
-    ProvisionalBookingRequest request = new ProvisionalBookingRequest(
-        NSInternationalSpeechlet.UNIQUE_NS_ID,
-        selectedJourney.getId(),
-        selectedJourney.getOffers().get(selectedClass).getId(),
-        "true",
-        selectedJourney.getOrigin().getCode(),
-        selectedJourney.getDestination().getCode());
+
+    DB.addJourney(journeyidentifier,selectedJourney,selectedClass);
+    ProvisionalBookingRequest request = new ProvisionalBookingRequest(selectedJourney,selectedClass);
     Dnr model = NSInternationalSpeechlet.API.getResponse(request);
 
     String gotoUrl = ("https://www.nsinternational.nl/en/traintickets#/passengers/" + model
@@ -631,13 +621,7 @@ public class NSInternationalSpeechlet implements Speechlet {
     Connections data = API.getResponse(cheapestRequest);
     UNIQUE_NS_ID = data.getData().getUid();
     Connection selectedJourney = data.getData().getConnections().get(0);
-    ProvisionalBookingRequest request = new ProvisionalBookingRequest(
-        NSInternationalSpeechlet.UNIQUE_NS_ID,
-        selectedJourney.getId(),
-        selectedJourney.getOffers().get(1).getId(),
-        "true",
-        selectedJourney.getOrigin().getCode(),
-        selectedJourney.getDestination().getCode());
+    ProvisionalBookingRequest request = new ProvisionalBookingRequest(selectedJourney,selectedClass);
     Dnr model = NSInternationalSpeechlet.API.getResponse(request);
 
     String gotoUrl = ("https://www.nsinternational.nl/en/traintickets#/passengers/" + model

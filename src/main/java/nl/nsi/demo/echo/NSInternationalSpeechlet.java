@@ -230,42 +230,29 @@ public class NSInternationalSpeechlet implements Speechlet {
       addUser(session.getUser().getAccessToken());
       return newUser();
     }
-
-    if ("Traveler".equals(intentName)) {
-      if (request.getDialogState() == STARTED || request.getDialogState() == IN_PROGRESS) {
-        return delegateDirective();
-      } else {
+    if (request.getDialogState() == STARTED || request.getDialogState() == IN_PROGRESS) {
+      return delegateDirective();
+    }
+    switch(intentName){
+      case "Traveler":
         return getTravelerResponse(intent);
-      }
-    } else if ("Cheapest".equals(intentName)) {
-      return getCheapestOption(intent);
-    } else if ("LocationIntent".equals(intentName)) {
-      if (request.getDialogState() == STARTED || request.getDialogState() == IN_PROGRESS) {
-        return delegateDirective();
-      } else {
+      case "Cheapest":
+        return getCheapestOption(intent);
+      case "LocationIntent":
         return getLocationIntentResponse(intent);
-      }
-    } else if ("CompositionIntent".equals(intentName)) {
-      if (request.getDialogState() == STARTED || request.getDialogState() == IN_PROGRESS) {
-        return delegateDirective();
-      } else {
+      case "CompositionIntent":
         return getCompositionIntentResponse(intent);
-      }
-    } else if ("ChooseIntent".equals(intentName) && journeyHasBeenSelected) {
-      return getChooseIntentResponse(intent);
-
-    } else if ("AMAZON.StopIntent".equals(intentName)) {
-      PlainTextOutputSpeech outputSpeech = new PlainTextOutputSpeech();
-      outputSpeech.setText("Goodbye");
-
-      return SpeechletResponse.newTellResponse(outputSpeech);
-    } else if ("AMAZON.CancelIntent".equals(intentName)) {
-      PlainTextOutputSpeech outputSpeech = new PlainTextOutputSpeech();
-      outputSpeech.setText("Goodbye");
-
-      return SpeechletResponse.newTellResponse(outputSpeech);
-    } else {
-      throw new SpeechletException("Invalid Intent");
+      case "AMAZON.CancelIntent":
+      case "AMAZON.StopIntent":
+        PlainTextOutputSpeech outputSpeech = new PlainTextOutputSpeech();
+        outputSpeech.setText("Goodbye");
+        return SpeechletResponse.newTellResponse(outputSpeech);
+      case "ChooseIntent":
+        if(journeyHasBeenSelected){
+          return getChooseIntentResponse(intent);
+        }
+       default:
+         throw new SpeechletException("Invalid Intent");
     }
   }
 
@@ -421,6 +408,7 @@ public class NSInternationalSpeechlet implements Speechlet {
     speechText += selectedJourney.getJourneySummary();
 
     DB.addJourney(journeyidentifier,selectedJourney,selectedClass);
+
     ProvisionalBookingRequest request = new ProvisionalBookingRequest(selectedJourney,selectedClass);
     Dnr model = NSInternationalSpeechlet.API.getResponse(request);
 

@@ -361,7 +361,7 @@ public class NSInternationalSpeechlet implements Speechlet {
       speechText.append("Which option do you choose?");
     } else {
       speechText = new StringBuilder(
-          "Something went wrong with collection data of your journey, please try again later");
+          "Something went wrong with collecting the data of your journey, please try again later");
     }
     StandardCard card = new StandardCard();
     card.setTitle("Travel options");
@@ -392,10 +392,8 @@ public class NSInternationalSpeechlet implements Speechlet {
       try {
         selectedJourneyInteger = Integer.parseInt(option.getValue()) - 1;
       } catch (NumberFormatException NFE) {
-
         return newAskResponse("I didn't quite get that, which option did you choose?",
             "To cancel the order, just say exit");
-
       }
       speechText = "You have chosen option " + (selectedJourneyInteger + 1) + " . ";
     }

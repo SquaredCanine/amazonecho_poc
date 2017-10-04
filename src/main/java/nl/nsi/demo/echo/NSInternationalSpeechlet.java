@@ -199,10 +199,8 @@ public class NSInternationalSpeechlet implements Speechlet {
         session.getSessionId());
     if (session.getUser().getAccessToken() == null) {
       return linkaccountCard();
-    } else {
-      if (isNewUser) {
+    } else if (isNewUser) {
         addUser(session.getUser().getAccessToken());
-      }
     }
     return getUpdatedResponse();
   }

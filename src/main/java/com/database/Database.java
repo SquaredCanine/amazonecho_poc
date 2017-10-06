@@ -269,7 +269,7 @@ public class Database {
 
       rs = ps.executeQuery();
       rs.next();
-      return Integer.parseInt(rs.getString(1)) + 1;
+      return rs.getInt(1) + 1;
     } catch (SQLException SQLE) {
       System.out.println("There is a problem with SQL: " + SQLE.getMessage());
     } catch (NumberFormatException NFE) {

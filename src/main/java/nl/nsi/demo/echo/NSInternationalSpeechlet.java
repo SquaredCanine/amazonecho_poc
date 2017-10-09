@@ -220,7 +220,7 @@ public class NSInternationalSpeechlet implements Speechlet {
     log.info("onIntent requestId={}, sessionId={}", request.getRequestId(),
         session.getSessionId());
     Intent intent = request.getIntent();
-    String intentName = (intent != null) ? intent.getName() : null;
+    String intentName = (intent != null) ? intent.getName() : "null";
 
     if (session.getUser().getAccessToken() == null) {
       return linkaccountCard();
